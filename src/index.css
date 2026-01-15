@@ -274,3 +274,21 @@ ul {
   background: transparent;
 }
 /* Dock styles moved to component-scoped file: src/components/Dock.css */
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 10px 12px 18px;
+  font-size: 12px;
+  color: rgba(17, 24, 39, 0.6);
+}
+.app-footer a {
+  color: rgba(17, 24, 39, 0.7);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(17, 24, 39, 0.04);
+  padding-bottom: 1px;
+}
+.app-footer a:hover {
+  color: rgba(17, 24, 39, 0.85);
+  border-bottom-color: rgba(17, 24, 39, 0.12);
+}

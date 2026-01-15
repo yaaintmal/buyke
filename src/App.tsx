@@ -6,6 +6,7 @@ import ItemList from './components/ItemList';
 import ErrorBanner from './components/ErrorBanner';
 import Dock, { type FilterType } from './components/Dock';
 import Settings from './components/Settings';
+import Footer from './components/Footer';
 
 function App() {
   const [items, setItems] = useState<ShoppingItem[]>([]);
@@ -99,6 +100,8 @@ function App() {
         />
 
         <Settings open={showSettings} onClose={() => setShowSettings(false)} />
+
+        <Footer />
       </div>
     </div>
   );

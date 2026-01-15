@@ -77,4 +77,4 @@ Das Frontend ist standardmäßig unter `http://localhost:5173` erreichbar.
 
 ## Lizenz
 
-ISC
+MIT

@@ -27,3 +27,7 @@ export const updateItemStatus = async (id: string, bought: boolean): Promise<Sho
 export const deleteItem = async (id: string): Promise<void> => {
   await axios.delete(`${API_URL}/${id}`);
 };
+
+export const deleteAllItems = async (): Promise<void> => {
+  await axios.delete(API_URL);
+};

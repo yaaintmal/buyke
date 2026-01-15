@@ -30,6 +30,6 @@ dist-ssr
 
 # custom ignores
 requirements.md
-*requirements.*
+MAL-*.md
 REQ.md
 TODO.md

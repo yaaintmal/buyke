@@ -1,13 +1,4 @@
-/* Dock component styles (migrated from index.css), fixed to viewport bottom */
-:root {
-  --dock-bg: rgba(255, 255, 255, 0.92);
-  --dock-border: rgba(16, 24, 40, 0.06);
-  --dock-gap: 1rem;
-  --dock-base: 48px;
-  --dock-base-mobile: 56px;
-  --dock-padding-y: 0.5rem;
-  --dock-safe: calc(var(--dock-base-mobile) + 64px);
-}
+/* Dock component styles (migrated from earlier index.css versions), fixed to viewport bottom */
 
 /* Full-width outer container fixed to viewport bottom; centers the panel */
 .dock-outer {
@@ -48,7 +39,7 @@
   outline: none;
   min-width: var(--dock-base);
   min-height: var(--dock-base);
-  color: #111827; /* icons/text inherit dark color */
+  color: var(--text-color); /* icons/text follow theme text color */
 }
 
 .dock-item:focus {
@@ -56,8 +47,8 @@
 }
 
 .dock-item.active {
-  background-color: rgba(5, 150, 105, 0.12); /* subtle accent */
-  border-color: rgba(16, 185, 129, 0.15);
+  background-color: var(--accent-12); /* subtle accent */
+  border-color: var(--accent-border);
 }
 
 .dock-icon {
@@ -80,7 +71,7 @@
   background-color: var(--dock-bg);
   padding: 0.125rem 0.5rem;
   font-size: 0.75rem;
-  color: #111827;
+  color: var(--text-color);
   transform: translateX(-50%);
 }
 

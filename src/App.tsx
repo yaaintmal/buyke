@@ -44,7 +44,9 @@ function App() {
 
   const handleToggle = async (id: string, currentStatus: boolean) => {
     try {
-      setItems((prev) => prev.map((item) => (item._id === id ? { ...item, bought: !currentStatus } : item)));
+      setItems((prev) =>
+        prev.map((item) => (item._id === id ? { ...item, bought: !currentStatus } : item)),
+      );
       await updateItemStatus(id, !currentStatus);
     } catch (err) {
       console.error(err);
@@ -68,7 +70,7 @@ function App() {
   return (
     <div className="app-root">
       <div className="card">
-        <Header openCount={items.filter(i => !i.bought).length} />
+        <Header openCount={items.filter((i) => !i.bought).length} />
 
         <AddItemForm onAdd={handleAdd} adding={adding} />
 

@@ -1,6 +1,7 @@
 # Design Requirements “Einkaufsliste”
 
 ## Frontend: React + TS
+
 - Input-Field + Btn
 - Produktname
 - Liste der Einträge
@@ -9,21 +10,23 @@
 - Löschen-Btn
 
 ## Backend Routes
+
 - get /items
 - post /items (Body: {name: string})
 - put /items/:id (aktualisiert “gekauft” state) > body {bought: boolean}
-- delete /items/:id 
+- delete /items/:id
 
 ## MongoDB Modell
+
 interface ShoppingItem {
-    _id: ObjectId;
-    name: string;
-    bought: boolean;
-    createdAt: Date;
+\_id: ObjectId;
+name: string;
+bought: boolean;
+createdAt: Date;
 }
 
-
 ## Technische Anforderungen
+
 - React + TS
 - Express + TS
 - MongoDB
@@ -31,5 +34,3 @@ interface ShoppingItem {
 - Authentifizierung nicht notwendig
 - Full README.md inkl. Setup Anleitung und Hinweis, ob externe UI-Bibliotheken verwendet wurden
 - Struktur: Frontend und Backend getrennt
-
-

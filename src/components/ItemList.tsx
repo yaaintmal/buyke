@@ -10,7 +10,7 @@ interface Props {
   onDelete: (id: string) => void;
 }
 
-export default function ItemList({ items, loading, onToggle, onDelete }: Props){
+export default function ItemList({ items, loading, onToggle, onDelete }: Props) {
   if (loading) return <Loading />;
   if (items.length === 0) return <EmptyState />;
 

@@ -12,7 +12,8 @@ app.use(express.json());
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/buyke';
 
-mongoose.connect(MONGO_URI)
+mongoose
+  .connect(MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
@@ -63,16 +64,12 @@ app.put('/items/:id', async (req: Request, res: Response): Promise<any> => {
   try {
     const { id } = req.params;
     const { bought } = req.body;
-    
+
     if (typeof bought !== 'boolean') {
-        return res.status(400).json({ error: 'Bought status must be a boolean' });
+      return res.status(400).json({ error: 'Bought status must be a boolean' });
     }
 
-    const updatedItem = await ShoppingItem.findByIdAndUpdate(
-      id,
-      { bought },
-      { new: true }
-    );
+    const updatedItem = await ShoppingItem.findByIdAndUpdate(id, { bought }, { new: true });
 
     if (!updatedItem) {
       return res.status(404).json({ error: 'Item not found' });

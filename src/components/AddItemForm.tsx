@@ -24,7 +24,12 @@ export default function AddItemForm({ onAdd, adding }: Props) {
         placeholder="Was brauchst du?"
         className="input"
       />
-      <button type="submit" disabled={adding || !value.trim()} className="add-button" aria-disabled={adding || !value.trim()}>
+      <button
+        type="submit"
+        disabled={adding || !value.trim()}
+        className="add-button"
+        aria-disabled={adding || !value.trim()}
+      >
         {adding ? <Loader2 className="icon spin" /> : <Plus className="icon" />}
       </button>
     </form>

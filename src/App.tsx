@@ -8,6 +8,8 @@ import {
   deleteAllItems,
 } from './api';
 import Header from './components/Header';
+import { LanguageProvider } from './contexts/LanguageContext';
+import { AvatarProvider } from './contexts/AvatarContext';
 import AddItemForm from './components/AddItemForm';
 import ItemList from './components/ItemList';
 import ErrorBanner from './components/ErrorBanner';
@@ -150,40 +152,44 @@ function App() {
   });
 
   return (
-    <div className="app-root">
-      <div className="card">
-        <Header openCount={items.filter((i) => !i.bought).length} />
+    <LanguageProvider>
+      <AvatarProvider>
+        <div className="app-root">
+          <div className="card">
+            <Header openCount={items.filter((i) => !i.bought).length} />
 
-        <main>
-          <AddItemForm onAdd={handleAdd} adding={adding} />
+            <main>
+              <AddItemForm onAdd={handleAdd} adding={adding} />
 
-          <div className="banner-area" aria-live="polite">
-            {error && <ErrorBanner message={error} />}
+              <div className="banner-area" aria-live="polite">
+                {error && <ErrorBanner message={error} />}
+              </div>
+
+              <Dock active={filter} onChange={setFilter} onSettings={() => setShowSettings(true)} />
+
+              <ItemList
+                items={filteredItems}
+                totalItems={items.length}
+                filter={filter}
+                loading={loading}
+                onToggle={handleToggle}
+                onDelete={handleDelete}
+              />
+
+              <Settings
+                open={showSettings}
+                onClose={() => setShowSettings(false)}
+                theme={theme}
+                onThemeChange={(t) => setTheme(t)}
+                onFactoryReset={handleFactoryReset}
+              />
+            </main>
+
+            <Footer />
           </div>
-
-          <Dock active={filter} onChange={setFilter} onSettings={() => setShowSettings(true)} />
-
-          <ItemList
-            items={filteredItems}
-            totalItems={items.length}
-            filter={filter}
-            loading={loading}
-            onToggle={handleToggle}
-            onDelete={handleDelete}
-          />
-
-          <Settings
-            open={showSettings}
-            onClose={() => setShowSettings(false)}
-            theme={theme}
-            onThemeChange={(t) => setTheme(t)}
-            onFactoryReset={handleFactoryReset}
-          />
-        </main>
-
-        <Footer />
-      </div>
-    </div>
+        </div>
+      </AvatarProvider>
+    </LanguageProvider>
   );
 }
 

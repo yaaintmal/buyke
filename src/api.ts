@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/items';
+import { api } from './lib/apiClient';
 
 export interface ShoppingItem {
   _id: string;
@@ -10,24 +8,24 @@ export interface ShoppingItem {
 }
 
 export const fetchItems = async (): Promise<ShoppingItem[]> => {
-  const response = await axios.get(API_URL);
+  const response = await api.get('/items');
   return response.data;
 };
 
 export const createItem = async (name: string): Promise<ShoppingItem> => {
-  const response = await axios.post(API_URL, { name });
+  const response = await api.post('/items', { name });
   return response.data;
 };
 
 export const updateItemStatus = async (id: string, bought: boolean): Promise<ShoppingItem> => {
-  const response = await axios.put(`${API_URL}/${id}`, { bought });
+  const response = await api.put(`/items/${id}`, { bought });
   return response.data;
 };
 
 export const deleteItem = async (id: string): Promise<void> => {
-  await axios.delete(`${API_URL}/${id}`);
+  await api.delete(`/items/${id}`);
 };
 
 export const deleteAllItems = async (): Promise<void> => {
-  await axios.delete(API_URL);
+  await api.delete('/items');
 };

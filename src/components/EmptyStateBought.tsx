@@ -1,13 +1,23 @@
-import nuttinBought from '../public/2_nuttin-bought.png';
+import v1 from '../public/v1-2_nuttin-bought.webp';
+import v2 from '../public/v2-2_nuttin-bought.webp';
+import v3 from '../public/v3-2_nuttin-bought.webp';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../i18n';
+import { useAvatar } from '../contexts/AvatarContext';
 
 export default function EmptyStateBought() {
+  const { lang } = useLanguage();
+  const t = translations[lang].empty;
+  const { avatar } = useAvatar();
+  const src = avatar === 'v1' ? v1 : avatar === 'v2' ? v2 : v3;
+
   return (
     <div className="empty">
       <div className="empty-illustration">
-        <img src={nuttinBought} alt="Noch nichts gekauft" className="empty-illustration-image" />
+        <img src={src} alt={t.noneBoughtTitle} className="empty-illustration-image" />
       </div>
-      <p className="empty-title">Du hast noch keine Artikel gekauft</p>
-      <p className="empty-sub">Vielleicht solltest Du mal einkaufen gehen</p>
+      <p className="empty-title">{t.noneBoughtTitle}</p>
+      <p className="empty-sub">{t.noneBoughtSub}</p>
     </div>
   );
 }

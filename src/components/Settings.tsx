@@ -1,4 +1,10 @@
 import { Sun, Moon } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../i18n';
+import { useAvatar } from '../contexts/AvatarContext';
+import v1Preview from '../public/v1-1_need-input.webp';
+import v2Preview from '../public/v2-1_need-input.webp';
+import v3Preview from '../public/v3-1_need-input.webp';
 
 interface Props {
   open: boolean;
@@ -9,22 +15,24 @@ interface Props {
 }
 
 export default function Settings({ open, onClose, theme, onThemeChange, onFactoryReset }: Props) {
+  const { lang, setLang } = useLanguage();
+  const { avatar, setAvatar } = useAvatar();
+  const t = translations[lang];
+
   if (!open) return null;
 
   const handleFactoryReset = async () => {
-    const ok = window.confirm(
-      'Bist du sicher, dass du alle Einträge löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.',
-    );
+    const ok = window.confirm(t.factoryResetConfirm);
     if (!ok) return;
 
     try {
       await onFactoryReset();
       // simple feedback
-      alert('Alle Einträge wurden gelöscht.');
+      alert(t.factoryResetSuccess);
       onClose();
     } catch (err) {
       console.error(err);
-      alert('Fehler beim Löschen der Einträge.');
+      alert(t.factoryResetError);
     }
   };
 
@@ -53,11 +61,13 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
           minWidth: 320,
         }}
       >
-        <h3 style={{ marginTop: 0 }}>Einstellungen</h3>
+        <h3 style={{ marginTop: 0 }}>{t.settings}</h3>
 
         <section style={{ marginBottom: 12 }}>
           <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
-            <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>Theme</legend>
+            <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>
+              {t.theme}
+            </legend>
 
             <div
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}
@@ -67,8 +77,8 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                 aria-checked={theme === 'dark'}
                 aria-label={
                   theme === 'dark'
-                    ? 'Dunkles Thema, wechseln zu hellem Thema'
-                    : 'Helles Thema, wechseln zu dunklem Thema'
+                    ? `${t.themeDark}, ${t.themeLight}`
+                    : `${t.themeLight}, ${t.themeDark}`
                 }
                 onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
                 onKeyDown={(e) => {
@@ -87,11 +97,13 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                   background: theme === 'dark' ? 'var(--dock-bg)' : 'var(--card)',
                   color: 'var(--text-color)',
                 }}
-                title={theme === 'dark' ? 'Dunkel (aktiv)' : 'Wechsel zu Dunkel'}
+                title={theme === 'dark' ? `${t.themeDark} (aktiv)` : `Wechsel zu ${t.themeDark}`}
               >
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
                   {theme === 'dark' ? <Moon size={18} /> : <Sun size={18} />}
-                  <span style={{ fontSize: 13 }}>{theme === 'dark' ? 'Dunkel' : 'Hell'}</span>
+                  <span style={{ fontSize: 13 }}>
+                    {theme === 'dark' ? t.themeDark : t.themeLight}
+                  </span>
                 </span>
               </button>
 
@@ -99,7 +111,9 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                 <button
                   onClick={() => onThemeChange('light')}
                   aria-pressed={theme === 'light'}
-                  aria-label={theme === 'light' ? 'Hell (aktiv)' : 'Wechsel zu Hell'}
+                  aria-label={
+                    theme === 'light' ? `${t.themeLight} (aktiv)` : `Wechsel zu ${t.themeLight}`
+                  }
                   style={{
                     textAlign: 'center',
                     background: theme === 'light' ? 'var(--accent-12)' : 'transparent',
@@ -109,16 +123,17 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                     cursor: 'pointer',
                   }}
                 >
-                  <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>Hell</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-                    Klarer Hintergrund, grüne Akzente
-                  </div>
+                  <Sun size={18} style={{ color: 'var(--accent)' }} />
+                  <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>{t.themeLight}</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.themeLightDesc}</div>
                 </button>
 
                 <button
                   onClick={() => onThemeChange('dark')}
                   aria-pressed={theme === 'dark'}
-                  aria-label={theme === 'dark' ? 'Dunkel (aktiv)' : 'Wechsel zu Dunkel'}
+                  aria-label={
+                    theme === 'dark' ? `${t.themeDark} (aktiv)` : `Wechsel zu ${t.themeDark}`
+                  }
                   style={{
                     textAlign: 'center',
                     background: theme === 'dark' ? 'rgba(255, 183, 77, 0.12)' : 'transparent',
@@ -128,10 +143,9 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                     cursor: 'pointer',
                   }}
                 >
-                  <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>Dunkel</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-                    Dunkles Thema mit Amber-Akzenten
-                  </div>
+                  <Moon size={18} style={{ color: 'var(--accent)' }} />
+                  <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>{t.themeDark}</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.themeDarkDesc}</div>
                 </button>
               </div>
             </div>
@@ -139,11 +153,137 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
         </section>
 
         <section style={{ marginBottom: 12 }}>
-          <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>Daten</legend>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-              Löscht alle Einträge unwiderruflich
+          <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+            <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>
+              {t.language}
+            </legend>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+              <button
+                onClick={() => setLang('de')}
+                aria-pressed={lang === 'de'}
+                title={t.languageGerman}
+                style={{
+                  padding: 8,
+                  borderRadius: 6,
+                  cursor: 'pointer',
+                  background: lang === 'de' ? 'var(--accent-12)' : 'transparent',
+                  color: 'var(--text-color)',
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  🇩🇪
+                  <span>{t.languageGerman}</span>
+                </span>
+              </button>
+
+              <button
+                onClick={() => setLang('en')}
+                aria-pressed={lang === 'en'}
+                title={t.languageEnglish}
+                style={{
+                  padding: 8,
+                  borderRadius: 6,
+                  cursor: 'pointer',
+                  background: lang === 'en' ? 'var(--accent-12)' : 'transparent',
+                  color: 'var(--text-color)',
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  🏴󠁧󠁢󠁥󠁮󠁧󠁿
+                  <span>{t.languageEnglish}</span>
+                </span>
+              </button>
             </div>
+          </fieldset>
+        </section>
+
+        <section style={{ marginBottom: 12 }}>
+          <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+            <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>
+              {t.avatar}
+            </legend>
+            <div
+              className="avatar-options"
+              style={{ display: 'flex', gap: 12, justifyContent: 'center', alignItems: 'center' }}
+            >
+              <button
+                onClick={() => setAvatar('v1')}
+                aria-pressed={avatar === 'v1'}
+                title={t.avatarHamster}
+                style={{
+                  padding: 8,
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  background: avatar === 'v1' ? 'var(--accent-12)' : 'transparent',
+                  border: '1px solid transparent',
+                  color: 'var(--muted)',
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <img
+                    src={v1Preview}
+                    alt={t.avatarHamster}
+                    style={{ width: 64, height: 28, objectFit: 'cover', borderRadius: 6 }}
+                  />
+                  <span style={{ fontSize: 13 }}>{t.avatarHamster}</span>
+                </span>
+              </button>
+
+              <button
+                onClick={() => setAvatar('v2')}
+                aria-pressed={avatar === 'v2'}
+                title={t.avatarRobot}
+                style={{
+                  padding: 8,
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  background: avatar === 'v2' ? 'var(--accent-12)' : 'transparent',
+                  border: '1px solid transparent',
+                  color: 'var(--muted)',
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <img
+                    src={v2Preview}
+                    alt={t.avatarRobot}
+                    style={{ width: 64, height: 28, objectFit: 'cover', borderRadius: 6 }}
+                  />
+                  <span style={{ fontSize: 13 }}>{t.avatarRobot}</span>
+                </span>
+              </button>
+
+              <button
+                onClick={() => setAvatar('v3')}
+                aria-pressed={avatar === 'v3'}
+                title={t.avatarBag}
+                style={{
+                  padding: 8,
+                  borderRadius: 8,
+                  cursor: 'pointer',
+                  background: avatar === 'v3' ? 'var(--accent-12)' : 'transparent',
+                  border: '1px solid transparent',
+                  color: 'var(--muted)',
+                }}
+              >
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <img
+                    src={v3Preview}
+                    alt={t.avatarBag}
+                    style={{ width: 64, height: 28, objectFit: 'cover', borderRadius: 6 }}
+                  />
+                  <span style={{ fontSize: 13 }}>{t.avatarBag}</span>
+                </span>
+              </button>
+            </div>
+          </fieldset>
+        </section>
+
+        <section style={{ marginBottom: 12 }}>
+          <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>
+            {t.data}
+          </legend>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.dataDeleteDesc}</div>
             <button
               onClick={handleFactoryReset}
               style={{
@@ -155,7 +295,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                 fontWeight: 600,
               }}
             >
-              Factory reset
+              {t.factoryResetButton}
             </button>
           </div>
         </section>
@@ -171,7 +311,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
               color: 'var(--text-color)',
             }}
           >
-            Schließen
+            {t.close}
           </button>
         </div>
       </div>

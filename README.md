@@ -84,12 +84,14 @@ Create a local `.env` file (do not commit it) or copy `.env.example` and set the
 ```
 VITE_APP_TITLE=Buyke
 VITE_APP_SLOGAN=just buy it!
+VITE_API_URL=https://api.example.com
 ```
 
 - `VITE_APP_TITLE` — displayed app title (e.g., `Buyke`)
 - `VITE_APP_SLOGAN` — slogan text (e.g., `just buy it!`)
+- `VITE_API_URL` — base URL of the backend API your app should talk to (e.g., `https://api.example.com`). If not set the app will default to `http://localhost:5000` for local development.
 
-When deploying, set these variables in your hosting environment so they are available during the build.
+When deploying, set these variables in your hosting environment so they are available during the build. Ensure the backend sets CORS to allow requests from your frontend origin if hosted separately.
 
 ## Lizenz
 

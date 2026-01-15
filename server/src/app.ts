@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import itemsRouter from './routes/items';
+import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
 
@@ -15,5 +16,8 @@ app.use('/items', itemsRouter);
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
+
+// Error handler (global)
+app.use(errorHandler);
 
 export default app;

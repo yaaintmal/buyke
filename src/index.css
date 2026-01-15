@@ -196,7 +196,70 @@ body {
   align-items: center;
   justify-content: center;
   margin: 0 auto 12px;
+  overflow: hidden;
+  position: relative;
+  /* Wider container sized for a 21:9-like visual */
+  width: 100%;
+  /* ~21:9 ratio (approx) */
+  height: 346px;
+
+  border-radius: 14px;
+  /* Subtle elevated look */
+  box-shadow:
+    0 10px 30px rgba(2, 6, 23, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
+
+.empty-illustration::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.04));
+  pointer-events: none;
+}
+
+.empty-illustration img {
+  /* Larger than container for recognizable crop; 21:9 aspect preserved */
+  width: 130%;
+  height: auto;
+  aspect-ratio: 1/1
+  object-fit: cover;
+  display: block;
+  transform: translateY(6%);
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    filter 280ms ease;
+  filter: saturate(0.96) contrast(0.98);
+}
+
+.empty-illustration:hover img,
+.empty-illustration:focus-within img {
+  transform: scale(1.06) translateY(8%);
+  filter: saturate(1.05) contrast(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-illustration img {
+    transition: none;
+    transform: translateY(0);
+  }
+  .empty-illustration:hover img,
+  .empty-illustration:focus-within img {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .empty-illustration {
+    width: 180px;
+    height: 86px;
+  }
+  .empty-illustration img {
+    width: 150%;
+    transform: translateY(-4%);
+  }
+}
+
 .empty-title {
   font-size: 18px;
   font-weight: 600;

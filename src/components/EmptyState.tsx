@@ -1,10 +1,10 @@
-import { ShoppingCart } from 'lucide-react';
+import needInput from '../public/1_need-input.png';
 
 export default function EmptyState() {
   return (
     <div className="empty">
       <div className="empty-illustration">
-        <ShoppingCart className="icon large muted" />
+        <img src={needInput} alt="Bitte Einträge hinzufügen" className="empty-illustration-image" />
       </div>
       <p className="empty-title">Deine Liste ist leer</p>
       <p className="empty-sub">Füge oben Produkte hinzu, die du einkaufen möchtest.</p>

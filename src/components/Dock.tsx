@@ -8,6 +8,8 @@ import {
   type SpringOptions,
 } from 'framer-motion';
 import { List, Clock, Check, Settings as SettingsIcon } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
+import { translations } from '../i18n';
 import './Dock.css';
 
 export type FilterType = 'all' | 'open' | 'bought';
@@ -80,10 +82,13 @@ export default function Dock({
 }: DockProps) {
   const mouseX = useMotionValue(Infinity);
 
+  const { lang } = useLanguage();
+  const t = translations[lang];
+
   const items = [
-    { key: 'all', label: 'Alle', icon: <List /> },
-    { key: 'open', label: 'Offen', icon: <Clock /> },
-    { key: 'bought', label: 'Gekauft', icon: <Check /> },
+    { key: 'all', label: t.all, icon: <List /> },
+    { key: 'open', label: t.open, icon: <Clock /> },
+    { key: 'bought', label: t.bought, icon: <Check /> },
   ] as const;
 
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -169,8 +174,8 @@ export default function Dock({
         <button
           className="dock-button"
           onClick={() => onSettings && onSettings()}
-          title="Einstellungen"
-          aria-label="Einstellungen öffnen"
+          title={t.settings}
+          aria-label={t.settingsOpenAria}
           style={{ background: 'transparent', border: 'none', padding: 0 }}
         >
           <DockItem
@@ -183,7 +188,7 @@ export default function Dock({
             <div className="dock-icon">
               <SettingsIcon />
             </div>
-            <div className="dock-label">Einstellungen</div>
+            <div className="dock-label">{t.settings}</div>
           </DockItem>
         </button>
       </div>

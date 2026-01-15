@@ -260,6 +260,42 @@ body {
   }
 }
 
+/* Avatar selection responsive layout */
+.avatar-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+.avatar-options button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.avatar-options img {
+  width: 64px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+@media (max-width: 480px) {
+  .avatar-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .avatar-options button {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px;
+  }
+  .avatar-options img {
+    width: 56px;
+    height: 24px;
+    margin-right: 8px;
+  }
+}
+
 .empty-title {
   font-size: 18px;
   font-weight: 600;

@@ -13,6 +13,7 @@ export default function Header({ openCount }: Props) {
         </div>
         <h1 className="title">Buyke - just buy it!</h1>
       </div>
+
       <div className="count">{openCount} offen</div>
     </header>
   );

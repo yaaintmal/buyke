@@ -309,6 +309,89 @@ ul {
   background: transparent;
 }
 
+/* Accessible focus rings */
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.dock-button:focus-visible {
+  outline: 3px solid rgba(245, 158, 11, 0.18); /* amber-ish focus for dock */
+  outline-offset: 4px;
+  border-radius: 9999px;
+}
+
+/* Banner reservation to avoid layout shift when errors appear */
+.banner-area {
+  min-height: 44px; /* reserve space for a single-line banner */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+}
+
+.error {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.error-inner {
+  width: 100%;
+  max-width: 420px;
+  background: var(--danger); /* stronger contrast */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Utility: visually hidden for accessible labels */
+.sr-only {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+/* Skeleton utilities */
+.skeleton-item {
+  pointer-events: none;
+}
+.skeleton-box {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eaeef0 25%, #f5f7f8 50%, #eaeef0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+.skeleton-line {
+  display: inline-block;
+  height: 16px;
+  width: 140px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eaeef0 25%, #f5f7f8 50%, #eaeef0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s linear infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Pending item slight opacity */
+.list-item.pending {
+  opacity: 0.9;
+}
+
 /* Theme: dark overrides */
 .theme-dark {
   --bg: #0f1724; /* zinc/dark gray */

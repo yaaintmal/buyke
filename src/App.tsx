@@ -4,12 +4,17 @@ import Header from './components/Header';
 import AddItemForm from './components/AddItemForm';
 import ItemList from './components/ItemList';
 import ErrorBanner from './components/ErrorBanner';
+import Dock, { type FilterType } from './components/Dock';
+import Settings from './components/Settings';
 
 function App() {
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
+
+  const [filter, setFilter] = useState<FilterType>('all');
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     loadItems();
@@ -67,6 +72,12 @@ function App() {
     }
   };
 
+  const filteredItems = items.filter((it) => {
+    if (filter === 'all') return true;
+    if (filter === 'open') return !it.bought;
+    return it.bought;
+  });
+
   return (
     <div className="app-root">
       <div className="card">
@@ -76,7 +87,18 @@ function App() {
 
         {error && <ErrorBanner message={error} />}
 
-        <ItemList items={items} loading={loading} onToggle={handleToggle} onDelete={handleDelete} />
+        <Dock active={filter} onChange={setFilter} onSettings={() => setShowSettings(true)} />
+
+        <ItemList
+          items={filteredItems}
+          totalItems={items.length}
+          filter={filter}
+          loading={loading}
+          onToggle={handleToggle}
+          onDelete={handleDelete}
+        />
+
+        <Settings open={showSettings} onClose={() => setShowSettings(false)} />
       </div>
     </div>
   );

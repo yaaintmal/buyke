@@ -58,7 +58,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
 
         <section style={{ marginBottom: 12 }}>
           <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
-            <legend style={{ fontSize: 14, marginBottom: 8 }}>Theme</legend>
+            <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>Theme</legend>
 
             <div
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}
@@ -97,26 +97,50 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
               </button>
 
               <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 6 }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontWeight: 600 }}>Hell</div>
+                <button
+                  onClick={() => onThemeChange('light')}
+                  aria-pressed={theme === 'light'}
+                  aria-label={theme === 'light' ? 'Hell (aktiv)' : 'Wechsel zu Hell'}
+                  style={{
+                    textAlign: 'center',
+                    background: theme === 'light' ? 'var(--accent-12)' : 'transparent',
+                    border: '1px solid transparent',
+                    padding: 8,
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>Hell</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)' }}>
                     Klarer Hintergrund, grüne Akzente
                   </div>
-                </div>
+                </button>
 
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontWeight: 600 }}>Dunkel</div>
+                <button
+                  onClick={() => onThemeChange('dark')}
+                  aria-pressed={theme === 'dark'}
+                  aria-label={theme === 'dark' ? 'Dunkel (aktiv)' : 'Wechsel zu Dunkel'}
+                  style={{
+                    textAlign: 'center',
+                    background: theme === 'dark' ? 'rgba(255, 183, 77, 0.12)' : 'transparent',
+                    border: '1px solid transparent',
+                    padding: 8,
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>Dunkel</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)' }}>
                     Dunkles Thema mit Amber-Akzenten
                   </div>
-                </div>
+                </button>
               </div>
             </div>
           </fieldset>
         </section>
 
         <section style={{ marginBottom: 12 }}>
-          <legend style={{ fontSize: 14, marginBottom: 8 }}>Daten</legend>
+          <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>Daten</legend>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>
               Löscht alle Einträge unwiderruflich

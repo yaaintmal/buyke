@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Check, ShoppingCart, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { type ShoppingItem, fetchItems, createItem, updateItemStatus, deleteItem } from './api';
+import Header from './components/Header';
+import AddItemForm from './components/AddItemForm';
+import ItemList from './components/ItemList';
+import ErrorBanner from './components/ErrorBanner';
 
 function App() {
   const [items, setItems] = useState<ShoppingItem[]>([]);
-  const [newItemName, setNewItemName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
@@ -27,15 +29,11 @@ function App() {
     }
   };
 
-  const handleAddItem = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newItemName.trim()) return;
-
+  const handleAdd = async (name: string) => {
     try {
       setAdding(true);
-      const newItem = await createItem(newItemName);
+      const newItem = await createItem(name);
       setItems((prev) => [newItem, ...prev]);
-      setNewItemName('');
     } catch (err) {
       console.error(err);
       setError('Failed to add item.');
@@ -44,109 +42,39 @@ function App() {
     }
   };
 
-  const handleToggleBought = async (id: string, currentStatus: boolean) => {
+  const handleToggle = async (id: string, currentStatus: boolean) => {
     try {
-      // Optimistic update
-      setItems((prev) =>
-        prev.map((item) =>
-          item._id === id ? { ...item, bought: !currentStatus } : item
-        )
-      );
+      setItems((prev) => prev.map((item) => (item._id === id ? { ...item, bought: !currentStatus } : item)));
       await updateItemStatus(id, !currentStatus);
     } catch (err) {
       console.error(err);
       setError('Failed to update item.');
-      // Revert on failure
-      setItems((prev) =>
-        prev.map((item) =>
-          item._id === id ? { ...item, bought: currentStatus } : item
-        )
-      );
+      // revert
+      loadItems();
     }
   };
 
-  const handleDeleteItem = async (id: string) => {
+  const handleDelete = async (id: string) => {
     try {
-      // Optimistic update
       setItems((prev) => prev.filter((item) => item._id !== id));
       await deleteItem(id);
     } catch (err) {
       console.error(err);
       setError('Failed to delete item.');
-      loadItems(); // Revert/Reload
+      loadItems();
     }
   };
 
   return (
     <div className="app-root">
       <div className="card">
-        <header className="card-header">
-          <div className="header-left">
-            <div className="logo"><ShoppingCart className="icon" /></div>
-            <h1 className="title">Einkaufsliste</h1>
-          </div>
-          <div className="count">{items.filter(i => !i.bought).length} offen</div>
-        </header>
+        <Header openCount={items.filter(i => !i.bought).length} />
 
-        <form onSubmit={handleAddItem} className="form">
-          <input
-            type="text"
-            value={newItemName}
-            onChange={(e) => setNewItemName(e.target.value)}
-            placeholder="Was brauchst du?"
-            className="input"
-          />
-          <button
-            type="submit"
-            disabled={adding || !newItemName.trim()}
-            className="add-button"
-            aria-disabled={adding || !newItemName.trim()}
-          >
-            {adding ? <Loader2 className="icon spin" /> : <Plus className="icon" />}
-          </button>
-        </form>
+        <AddItemForm onAdd={handleAdd} adding={adding} />
 
-        {error && (
-          <div className="error">⚠️ {error}</div>
-        )}
+        {error && <ErrorBanner message={error} />}
 
-        <div className="list">
-          {loading ? (
-            <div className="loading"><Loader2 className="icon spin large" /><p>Lade Einkäufe...</p></div>
-          ) : items.length === 0 ? (
-            <div className="empty">
-              <div className="empty-illustration"><ShoppingCart className="icon large muted" /></div>
-              <p className="empty-title">Deine Liste ist leer</p>
-              <p className="empty-sub">Füge oben Produkte hinzu, die du einkaufen möchtest.</p>
-            </div>
-          ) : (
-            <ul>
-              {items.map((item) => (
-                <li
-                  key={item._id}
-                  className={item.bought ? 'list-item bought' : 'list-item'}
-                  onClick={() => handleToggleBought(item._id, item.bought)}
-                >
-                  <div className="item-left">
-                    <div className={item.bought ? 'checkbox bought' : 'checkbox'}>
-                      <Check className={item.bought ? 'icon check visible' : 'icon check hidden'} strokeWidth={3} />
-                    </div>
-
-                    <span className={item.bought ? 'item-name bought' : 'item-name'}>{item.name}</span>
-                  </div>
-
-                  <button
-                    onClick={(e) => { e.stopPropagation(); handleDeleteItem(item._id); }}
-                    className="delete-button"
-                    title="Löschen"
-                  >
-                    <Trash2 className="icon" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <ItemList items={items} loading={loading} onToggle={handleToggle} onDelete={handleDelete} />
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
-# Einkaufsliste (Buyke)
+# Einkaufsliste (Buyke - Just buy it!)
 
-Eine einfache Einkaufslisten-App, entwickelt mit React (Frontend) und Express (Backend), die MongoDB als Datenbank verwendet.
+Eine einfache React-Einkaufslisten-App, welche Express im Backend, sowie MongoDB als persistente Lösung zur Datenspeicherung verwendet.
 
 ## Features
 - Einträge hinzufügen
 - Einträge als "gekauft" markieren (Durchgestrichen & Checkmark)
 - Einträge löschen
-- Modernes UI mit Tailwind CSS und Lucide Icons
+- Modernes UI mit Lucide Icons (opt.: Tailwind CSS)
 
 ## Voraussetzungen
 - Node.js (v14 oder höher empfohlen)
@@ -15,7 +15,7 @@ Eine einfache Einkaufslisten-App, entwickelt mit React (Frontend) und Express (B
 ## Installation & Setup
 
 ### 1. Repository klonen / Projekt öffnen
-Stellen Sie sicher, dass Sie sich im Projektverzeichnis befinden.
+Wir stellen sicher, dass wir uns im Projektverzeichnis befinden.
 
 ### 2. Backend einrichten
 Das Backend befindet sich im Ordner `server`.
@@ -35,14 +35,14 @@ npm install
 
 ## App starten
 
-Sie müssen Backend und Frontend parallel starten.
+Backend und Frontend werden parallel gestartet.
 
 ### Backend starten
-Das Backend verwendet nun native Node.js Environment-Files.
+Wir nutzen die native Environment-File Eindung von Node.js (>V20!) .
 - **Development:** Nutzt `.env.development`
 - **Production:** Nutzt `.env.production`
 
-Öffnen Sie ein Terminal und führen Sie aus:
+Im Terminal führen wir aus:
 
 ```bash
 cd server

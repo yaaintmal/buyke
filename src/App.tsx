@@ -1,5 +1,12 @@
 import { useState, useEffect, useLayoutEffect } from 'react';
-import { type ShoppingItem, fetchItems, createItem, updateItemStatus, deleteItem } from './api';
+import {
+  type ShoppingItem,
+  fetchItems,
+  createItem,
+  updateItemStatus,
+  deleteItem,
+  deleteAllItems,
+} from './api';
 import Header from './components/Header';
 import AddItemForm from './components/AddItemForm';
 import ItemList from './components/ItemList';
@@ -20,9 +27,17 @@ function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     try {
       const s = localStorage.getItem('theme');
-      return s === 'dark' ? 'dark' : 'light';
+      if (s === 'light') return 'light';
+      if (s === 'dark') return 'dark';
+      // No stored preference — prefer the user's system setting if available
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
+      }
+      // Fallback default for first-time visitors
+      return 'dark';
     } catch {
-      return 'light';
+      return 'dark';
     }
   });
 
@@ -95,6 +110,23 @@ function App() {
     }
   };
 
+  const handleFactoryReset = async () => {
+    try {
+      setLoading(true);
+      await deleteAllItems();
+      setItems([]);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to reset items.');
+    } finally {
+      setLoading(false);
+      setShowSettings(false);
+      // reload to ensure server state matches
+      loadItems();
+    }
+  };
+
   const filteredItems = items.filter((it) => {
     if (filter === 'all') return true;
     if (filter === 'open') return !it.bought;
@@ -126,6 +158,7 @@ function App() {
           onClose={() => setShowSettings(false)}
           theme={theme}
           onThemeChange={(t) => setTheme(t)}
+          onFactoryReset={handleFactoryReset}
         />
 
         <Footer />

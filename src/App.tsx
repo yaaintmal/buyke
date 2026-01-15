@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { type ShoppingItem, fetchItems, createItem, updateItemStatus, deleteItem } from './api';
 import Header from './components/Header';
 import AddItemForm from './components/AddItemForm';
@@ -16,6 +16,28 @@ function App() {
 
   const [filter, setFilter] = useState<FilterType>('all');
   const [showSettings, setShowSettings] = useState(false);
+
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      const s = localStorage.getItem('theme');
+      return s === 'dark' ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
+  // apply theme class and persist synchronously before paint to avoid flash
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') root.classList.add('theme-dark');
+    else root.classList.remove('theme-dark');
+
+    try {
+      localStorage.setItem('theme', theme);
+    } catch {
+      // ignore
+    }
+  }, [theme]);
 
   useEffect(() => {
     loadItems();
@@ -99,7 +121,12 @@ function App() {
           onDelete={handleDelete}
         />
 
-        <Settings open={showSettings} onClose={() => setShowSettings(false)} />
+        <Settings
+          open={showSettings}
+          onClose={() => setShowSettings(false)}
+          theme={theme}
+          onThemeChange={(t) => setTheme(t)}
+        />
 
         <Footer />
       </div>

@@ -16,7 +16,7 @@ import Settings from './components/Settings';
 import Footer from './components/Footer';
 
 function App() {
-  const [items, setItems] = useState<ShoppingItem[]>([]);
+  const [items, setItems] = useState<(ShoppingItem & { pending?: boolean })[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
@@ -73,12 +73,28 @@ function App() {
   };
 
   const handleAdd = async (name: string) => {
+    const tempId = `pending-${Date.now()}`;
+    const pendingItem: ShoppingItem & { pending?: boolean } = {
+      _id: tempId,
+      name,
+      bought: false,
+      createdAt: new Date().toISOString(),
+      pending: true,
+    };
+
     try {
       setAdding(true);
+      // insert a pending placeholder with reserved height to avoid layout shift
+      setItems((prev) => [pendingItem, ...prev]);
+
       const newItem = await createItem(name);
-      setItems((prev) => [newItem, ...prev]);
+
+      // replace pending placeholder with real item
+      setItems((prev) => prev.map((it) => (it._id === tempId ? newItem : it)));
     } catch (err) {
       console.error(err);
+      // remove pending placeholder
+      setItems((prev) => prev.filter((it) => it._id !== tempId));
       setError('Failed to add item.');
     } finally {
       setAdding(false);
@@ -138,28 +154,32 @@ function App() {
       <div className="card">
         <Header openCount={items.filter((i) => !i.bought).length} />
 
-        <AddItemForm onAdd={handleAdd} adding={adding} />
+        <main>
+          <AddItemForm onAdd={handleAdd} adding={adding} />
 
-        {error && <ErrorBanner message={error} />}
+          <div className="banner-area" aria-live="polite">
+            {error && <ErrorBanner message={error} />}
+          </div>
 
-        <Dock active={filter} onChange={setFilter} onSettings={() => setShowSettings(true)} />
+          <Dock active={filter} onChange={setFilter} onSettings={() => setShowSettings(true)} />
 
-        <ItemList
-          items={filteredItems}
-          totalItems={items.length}
-          filter={filter}
-          loading={loading}
-          onToggle={handleToggle}
-          onDelete={handleDelete}
-        />
+          <ItemList
+            items={filteredItems}
+            totalItems={items.length}
+            filter={filter}
+            loading={loading}
+            onToggle={handleToggle}
+            onDelete={handleDelete}
+          />
 
-        <Settings
-          open={showSettings}
-          onClose={() => setShowSettings(false)}
-          theme={theme}
-          onThemeChange={(t) => setTheme(t)}
-          onFactoryReset={handleFactoryReset}
-        />
+          <Settings
+            open={showSettings}
+            onClose={() => setShowSettings(false)}
+            theme={theme}
+            onThemeChange={(t) => setTheme(t)}
+            onFactoryReset={handleFactoryReset}
+          />
+        </main>
 
         <Footer />
       </div>

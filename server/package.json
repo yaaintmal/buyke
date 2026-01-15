@@ -1,13 +1,13 @@
 {
-  "name": "server",
+  "name": "buyke-server-by-mal",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start:prod": "NODE_ENV=production node dist/index.js",
+    "start:prod": "NODE_ENV=production node --env-file=.env.production dist/index.js",
     "start": "npm run build && npm run start:prod",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "dev": "ts-node-dev --env-file=.env.development --respawn --transpile-only src/index.ts",
     "test": "jest --config ./jest.config.cjs"
   },
   "keywords": [],

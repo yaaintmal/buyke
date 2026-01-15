@@ -2,6 +2,7 @@ import type { ShoppingItem } from '../api';
 import Item from './Item';
 import EmptyState from './EmptyState';
 import EmptyStateBought from './EmptyStateBought';
+import EmptyStateAllBought from './EmptyStateAllBought';
 import Loading from './Loading';
 import type { FilterType } from './Dock';
 
@@ -31,7 +32,7 @@ export default function ItemList({
   if (items.length === 0) {
     if (filter === 'bought') return <EmptyStateBought />;
     // Default fallback for other filters: show generic empty state messaging
-    return <EmptyState />;
+    return <EmptyStateAllBought />;
   }
 
   return (

@@ -18,17 +18,24 @@ export default function AddItemForm({ onAdd, adding }: Props) {
 
   return (
     <form onSubmit={submit} className="form">
+      <label htmlFor="add-input" className="sr-only">
+        Neuen Eintrag hinzufügen
+      </label>
       <input
+        id="add-input"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Was brauchst du?"
         className="input"
+        aria-label="Neuen Eintrag"
       />
       <button
         type="submit"
         disabled={adding || !value.trim()}
         className="add-button"
         aria-disabled={adding || !value.trim()}
+        aria-label="Hinzufügen"
+        title="Hinzufügen"
       >
         {adding ? <Loader2 className="icon spin" /> : <Plus className="icon" />}
       </button>

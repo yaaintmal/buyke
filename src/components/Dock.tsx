@@ -137,6 +137,7 @@ export default function Dock({
             className={'dock-button'}
             onClick={() => onChange(it.key as FilterType)}
             aria-pressed={active === it.key}
+            aria-label={it.label}
             title={it.label}
             style={{ background: 'transparent', border: 'none', padding: 0 }}
             onKeyDown={(e) => {
@@ -169,6 +170,7 @@ export default function Dock({
           className="dock-button"
           onClick={() => onSettings && onSettings()}
           title="Einstellungen"
+          aria-label="Einstellungen öffnen"
           style={{ background: 'transparent', border: 'none', padding: 0 }}
         >
           <DockItem

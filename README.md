@@ -75,6 +75,22 @@ Das Frontend ist standardmäßig unter `http://localhost:5173` erreichbar.
 - **Backend:** Node.js (native --watch and --env-file), Express, TypeScript, Mongoose
 - **Datenbank:** MongoDB
 
+## Frontend environment variables
+
+The frontend uses Vite. Client-facing environment variables must be prefixed with `VITE_`.
+
+Create a local `.env` file (do not commit it) or copy `.env.example` and set the following variables:
+
+```
+VITE_APP_TITLE=Buyke
+VITE_APP_SLOGAN=just buy it!
+```
+
+- `VITE_APP_TITLE` — displayed app title (e.g., `Buyke`)
+- `VITE_APP_SLOGAN` — slogan text (e.g., `just buy it!`)
+
+When deploying, set these variables in your hosting environment so they are available during the build.
+
 ## Lizenz
 
 MIT

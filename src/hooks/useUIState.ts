@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from 'react';
+import { useTheme } from '../contexts/ThemeContext';
 
 export type FilterType = 'all' | 'open' | 'bought';
 
@@ -6,26 +7,11 @@ export const useUIState = () => {
   const [filter, setFilter] = useState<FilterType>('all');
   const [showSettings, setShowSettings] = useState<boolean>(false);
 
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    try {
-      const s = localStorage.getItem('theme');
-      if (s === 'light') return 'light';
-      if (s === 'dark') return 'dark';
-      if (typeof window !== 'undefined' && window.matchMedia) {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
-        if (window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
-      }
-      return 'dark';
-    } catch {
-      return 'dark';
-    }
-  });
+  // theme is managed by ThemeProvider; expose the provider's values via the hook
+  const { theme, setTheme } = useTheme();
 
   useLayoutEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') root.classList.add('theme-dark');
-    else root.classList.remove('theme-dark');
-
+    // keep localStorage in sync (ThemeProvider also does this but it's harmless to ensure consistency)
     try {
       localStorage.setItem('theme', theme);
     } catch {

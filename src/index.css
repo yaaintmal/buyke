@@ -1,5 +1,7 @@
 /* Base styles for Buyke (using plain css to replace TailwindCSS for showcasing purposes of a general understanding) */
 :root {
+  /* Variables are injected at runtime from `src/themes.ts` via the theme system.
+     Keep fallbacks minimal to avoid flash-of-unstyled (but rely on JS to apply full themes). */
   --bg: #f8fafb;
   --card: #ffffff;
   --card-border: rgba(15, 23, 42, 0.06);
@@ -8,29 +10,12 @@
   --accent-dark: #047857;
   --muted: #6b7280;
   --danger: #ef4444;
-
-  /* gentle accent variants */
-  --accent-12: rgba(5, 150, 105, 0.12);
-  --accent-border: rgba(16, 185, 129, 0.15);
-
-  /* Inputs and UI */
-  --form-bg: #fbfdfb;
-  --input-bg: #ffffff;
-  --input-border: #e5e7eb;
-  --list-item-hover: #f8faf9;
-  --empty-ill-bg: #f3f4f6;
-  --checkbox-border: #e5e7eb;
-  --checkbox-bg: #ffffff;
-  --delete-hover-bg: #fff2f2;
-
-  /* Dock defaults */
-  --dock-bg: rgba(255, 255, 255, 0.92);
-  --dock-border: rgba(16, 24, 40, 0.06);
-  --dock-gap: 1rem;
-  --dock-base: 48px;
-  --dock-base-mobile: 56px;
-  --dock-padding-y: 0.5rem;
-  --focus-ring: rgba(16, 185, 129, 0.08);
+  --header-gradient: linear-gradient(
+    135deg,
+    rgba(52, 211, 153, 0.9) 0%,
+    rgba(5, 150, 105, 0.95) 50%,
+    rgba(4, 120, 87, 1) 100%
+  );
 }
 
 * {
@@ -102,14 +87,9 @@ body {
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-/* Override for dark mode (using the amber tones) */
-.theme-dark .card-header {
-  background: linear-gradient(
-    135deg,
-    rgba(251, 191, 36, 0.85) 0%,
-    rgba(245, 158, 11, 0.95) 50%,
-    rgba(217, 119, 6, 1) 100%
-  );
+/* Header gradient is driven by theme variables */
+.card-header {
+  background: var(--header-gradient);
 }
 .header-left {
   display: flex;
@@ -493,7 +473,12 @@ input:focus-visible {
   width: 24px;
   height: 24px;
   border-radius: 6px;
-  background: linear-gradient(90deg, #eaeef0 25%, #f5f7f8 50%, #eaeef0 75%);
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.2s linear infinite;
 }
@@ -502,7 +487,12 @@ input:focus-visible {
   height: 16px;
   width: 140px;
   border-radius: 6px;
-  background: linear-gradient(90deg, #eaeef0 25%, #f5f7f8 50%, #eaeef0 75%);
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 25%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.2s linear infinite;
 }

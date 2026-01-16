@@ -102,7 +102,7 @@ Das Frontend ist standardmäßig unter `http://localhost:5173` erreichbar.
 
 ## Technologien
 
-- **Frontend:** React, TypeScript, Tailwind CSS, Lucide React, Axios, Vite
+- **Frontend:** React, TypeScript, pure CSS (Tailwind outfactored for showcasing purposes!), Lucide React, Axios, Vite
 - **Backend:** Node.js (native --watch and --env-file), Express, TypeScript, Mongoose
 - **Datenbank:** MongoDB
 
@@ -118,7 +118,7 @@ VITE_APP_SLOGAN=just buy it!
 VITE_API_URL=https://api.example.com
 ```
 
-- `VITE_APP_TITLE` — displayed app title (e.g., `Buyke`)
+- `VITE_APP_TITLE` — displayed app title (e.g., `Buyke` or `BlickBuy`)
 - `VITE_APP_SLOGAN` — slogan text (e.g., `just buy it!`)
 - `VITE_API_URL` — base URL of the backend API your app should talk to (e.g., `https://api.example.com`). If not set the app will default to `http://localhost:5000` for local development.
 

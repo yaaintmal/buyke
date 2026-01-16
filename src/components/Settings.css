@@ -19,7 +19,7 @@
   /* Make avatar previews square on small screens (4/4 aspect) */
   .avatar-preview {
     width: 64px;
-    height: 64px;
+    height: 28px;
     border-radius: 8px;
   }
 }

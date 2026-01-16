@@ -11,8 +11,8 @@ import toast from 'react-hot-toast';
 interface Props {
   open: boolean;
   onClose: () => void;
-  theme: 'light' | 'dark';
-  onThemeChange: (t: 'light' | 'dark') => void;
+  theme: 'light' | 'dark' | 'highContrast';
+  onThemeChange: (t: 'light' | 'dark' | 'highContrast') => void;
   onFactoryReset: () => Promise<void>;
 }
 
@@ -185,6 +185,31 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                   <Moon size={18} style={{ color: 'var(--accent)' }} />
                   <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>{t.themeDark}</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.themeDarkDesc}</div>
+                </button>
+
+                <button
+                  onClick={() => onThemeChange('highContrast')}
+                  aria-pressed={theme === 'highContrast'}
+                  aria-label={
+                    theme === 'highContrast'
+                      ? `${t.themeHighContrast} (aktiv)`
+                      : `Wechsel zu ${t.themeHighContrast}`
+                  }
+                  style={{
+                    textAlign: 'center',
+                    background: theme === 'highContrast' ? 'var(--accent-12)' : 'transparent',
+                    border: '1px solid transparent',
+                    padding: 8,
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <div style={{ fontWeight: 600, color: 'var(--text-color)' }}>
+                    {t.themeHighContrast}
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                    {t.themeHighContrastDesc}
+                  </div>
                 </button>
               </div>
             </div>

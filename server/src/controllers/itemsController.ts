@@ -18,8 +18,8 @@ export const createItem = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { name } = createItemSchema.parse(req.body);
-    const item = await service.createItem(name);
+    const payload = createItemSchema.parse(req.body);
+    const item = await service.createItem(payload);
     res.status(201).json(item);
   } catch (err) {
     next(err);
@@ -33,9 +33,9 @@ export const updateItem = async (
 ): Promise<void> => {
   try {
     const { id } = idParamSchema.parse(req.params);
-    const { bought } = updateItemSchema.parse(req.body);
+    const updates = updateItemSchema.parse(req.body);
 
-    const updated = await service.updateStatus(id, bought);
+    const updated = await service.updateStatus(id, updates);
     if (!updated) {
       throw new HttpError(404, 'Item not found');
     }

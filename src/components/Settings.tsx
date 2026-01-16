@@ -14,9 +14,19 @@ interface Props {
   theme: 'light' | 'dark' | 'highContrast';
   onThemeChange: (t: 'light' | 'dark' | 'highContrast') => void;
   onFactoryReset: () => Promise<void>;
+  extendedFunctions?: boolean;
+  onExtendedFunctionsChange?: (value: boolean) => void;
 }
 
-export default function Settings({ open, onClose, theme, onThemeChange, onFactoryReset }: Props) {
+export default function Settings({
+  open,
+  onClose,
+  theme,
+  onThemeChange,
+  onFactoryReset,
+  extendedFunctions = true,
+  onExtendedFunctionsChange,
+}: Props) {
   const { lang, setLang } = useLanguage();
   const { avatar, setAvatar } = useAvatar();
   const t = translations[lang];
@@ -328,6 +338,26 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
               </button>
             </div>
           </fieldset>
+        </section>
+
+        <section style={{ marginBottom: 12 }}>
+          <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>
+            {t.extendedFunctions}
+          </legend>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.extendedFunctionsDesc}</div>
+            <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={extendedFunctions}
+                onChange={(e) => onExtendedFunctionsChange?.(e.target.checked)}
+                style={{ marginRight: 8, cursor: 'pointer' }}
+              />
+              <span style={{ fontSize: 12, fontWeight: 600 }}>
+                {extendedFunctions ? 'Enabled' : 'Disabled'}
+              </span>
+            </label>
+          </div>
         </section>
 
         <section style={{ marginBottom: 12 }}>

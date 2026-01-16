@@ -6,6 +6,7 @@ import v1Preview from '../public/v1-1_need-input.webp';
 import v2Preview from '../public/v2-1_need-input.webp';
 import v3Preview from '../public/v3-1_need-input.webp';
 import './Settings.css';
+import toast from 'react-hot-toast';
 
 interface Props {
   open: boolean;
@@ -23,18 +24,54 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
   if (!open) return null;
 
   const handleFactoryReset = async () => {
-    const ok = window.confirm(t.factoryResetConfirm);
-    if (!ok) return;
+    // Show a non-blocking toast asking for confirmation with action buttons
+    toast(
+      (toastObj) => (
+        <div style={{ maxWidth: 360 }}>
+          <div style={{ marginBottom: 8 }}>{t.factoryResetConfirm}</div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <button
+              onClick={async () => {
+                toast.dismiss(toastObj.id);
+                try {
+                  await onFactoryReset();
+                  toast.success(t.factoryResetSuccess);
+                  onClose();
+                } catch (err) {
+                  console.error(err);
+                  toast.error(t.factoryResetError);
+                }
+              }}
+              style={{
+                padding: '6px 10px',
+                borderRadius: 6,
+                border: 'none',
+                background: 'var(--danger)',
+                color: 'white',
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              {t.confirm}
+            </button>
 
-    try {
-      await onFactoryReset();
-      // simple feedback
-      alert(t.factoryResetSuccess);
-      onClose();
-    } catch (err) {
-      console.error(err);
-      alert(t.factoryResetError);
-    }
+            <button
+              onClick={() => toast.dismiss(toastObj.id)}
+              style={{
+                padding: '6px 10px',
+                borderRadius: 6,
+                border: '1px solid var(--input-border)',
+                background: 'var(--card)',
+                cursor: 'pointer',
+              }}
+            >
+              {t.cancel}
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity },
+    );
   };
 
   return (

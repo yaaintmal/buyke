@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
+import { logger } from '../utils/logger';
 
 export class HttpError extends Error {
   status: number;
@@ -24,6 +25,6 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
     return;
   }
 
-  console.error(err);
+  logger.error('Unexpected error', err);
   res.status(500).json({ error: 'Internal server error' });
 }

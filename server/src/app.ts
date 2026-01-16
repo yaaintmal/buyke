@@ -1,8 +1,12 @@
+// node modules
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import itemsRouter from './routes/items';
+// middleware
 import { errorHandler } from './middleware/errorHandler';
+import { requestLogger } from './middleware/requestLogger';
+// config
 import config from './config';
 
 const app = express();
@@ -25,6 +29,7 @@ const corsOptions = {
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(requestLogger);
 
 // Routes
 app.use('/items', itemsRouter);
@@ -32,6 +37,12 @@ app.use('/items', itemsRouter);
 // Health
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
+});
+
+// Metrics / DB health
+import { getDbStatus } from './utils/database';
+app.get('/metrics', (_req, res) => {
+  res.json({ status: 'ok', db: getDbStatus() });
 });
 
 // Error handler (global)

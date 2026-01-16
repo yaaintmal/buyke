@@ -12,6 +12,7 @@ import Footer from './components/Footer';
 // Context Providers
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AvatarProvider } from './contexts/AvatarContext';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   const {
@@ -68,6 +69,7 @@ function App() {
             </main>
 
             <Footer />
+            <Toaster position="bottom-right" />
           </div>
         </div>
       </AvatarProvider>

@@ -1,4 +1,6 @@
 import axios from 'axios';
+// @ts-ignore
+import axiosRetry from 'axios-retry';
 
 const BASE = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000';
 
@@ -13,6 +15,18 @@ export const api = axios.create({
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
+  },
+});
+
+// Retry configuration
+axiosRetry(api, {
+  retries: 3,
+  retryDelay: axiosRetry.exponentialDelay,
+  retryCondition: (error: any) => {
+    // Retry on network errors or 5xx status codes
+    return (
+      axiosRetry.isNetworkOrIdempotentRequestError(error) || (error.response?.status ?? 0) >= 500
+    );
   },
 });
 

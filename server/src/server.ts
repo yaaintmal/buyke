@@ -1,6 +1,8 @@
 import http from 'http';
 import mongoose from 'mongoose';
 import app from './app';
+import { logger } from './utils/logger';
+import { connectWithRetry } from './utils/database';
 
 import config from './config';
 
@@ -20,21 +22,21 @@ const redactMongoUri = (uri: string) => {
 };
 
 export async function start(): Promise<http.Server> {
-  await mongoose.connect(MONGO_URI);
+  await connectWithRetry();
 
   const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🛒 Server is running on port ${PORT} 🛍️`);
-    console.log(`🛍️ MONGO_URI=${redactMongoUri(MONGO_URI)} 🛒`);
+    logger.success(`🛒 Server is running on port ${PORT} 🛍️`);
+    logger.info(`🛍️ MONGO_URI=${redactMongoUri(MONGO_URI)} 🛒`);
   });
 
   const gracefulShutdown = async (signal: string) => {
-    console.log(`Received ${signal}, shutting down...`);
-    server.close(() => console.log('HTTP server closed'));
+    logger.info(`Received ${signal}, shutting down...`);
+    server.close(() => logger.info('HTTP server closed'));
     try {
       await mongoose.connection.close();
-      console.log('Mongo connection closed');
+      logger.info('Mongo connection closed');
     } catch (err) {
-      console.error('Error closing Mongo connection', err);
+      logger.error('Error closing Mongo connection', err);
     }
     process.exit(0);
   };
@@ -48,7 +50,7 @@ export async function start(): Promise<http.Server> {
 // If this file is executed directly, start the server
 if (require.main === module) {
   start().catch((err) => {
-    console.error('Failed to start server', err);
+    logger.error('Failed to start server', err);
     process.exit(1);
   });
 }

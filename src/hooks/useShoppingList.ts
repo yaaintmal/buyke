@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import type { ShoppingItem } from '../api';
+import type { ShoppingItem, CreateItemPayload, UpdateItemPayload } from '../api';
 import { fetchItems, createItem, updateItemStatus, deleteItem, deleteAllItems } from '../api';
 
 export const useShoppingList = () => {
@@ -26,12 +26,15 @@ export const useShoppingList = () => {
     loadItems();
   }, [loadItems]);
 
-  const handleAdd = useCallback(async (name: string) => {
+  const handleAdd = useCallback(async (payload: CreateItemPayload) => {
     const tempId = `pending-${Date.now()}`;
     const pendingItem: ShoppingItem & { pending?: boolean } = {
       _id: tempId,
-      name,
+      name: payload.name,
       bought: false,
+      quantity: payload.quantity ?? 1,
+      unit: payload.unit ?? 'pcs',
+      category: payload.category ?? 'Other',
       createdAt: new Date().toISOString(),
       pending: true,
     };
@@ -40,7 +43,7 @@ export const useShoppingList = () => {
       setAdding(true);
       setItems((prev) => [pendingItem, ...prev]);
 
-      const newItem = await createItem(name);
+      const newItem = await createItem(payload);
 
       setItems((prev) => prev.map((it) => (it._id === tempId ? newItem : it)));
     } catch (err) {
@@ -58,7 +61,21 @@ export const useShoppingList = () => {
         setItems((prev) =>
           prev.map((item) => (item._id === id ? { ...item, bought: !currentStatus } : item)),
         );
-        await updateItemStatus(id, !currentStatus);
+        await updateItemStatus(id, { bought: !currentStatus });
+      } catch (err) {
+        console.error(err);
+        setError('Failed to update item.');
+        loadItems();
+      }
+    },
+    [loadItems],
+  );
+
+  const handleUpdate = useCallback(
+    async (id: string, updates: UpdateItemPayload) => {
+      try {
+        setItems((prev) => prev.map((item) => (item._id === id ? { ...item, ...updates } : item)));
+        await updateItemStatus(id, updates);
       } catch (err) {
         console.error(err);
         setError('Failed to update item.');
@@ -106,6 +123,7 @@ export const useShoppingList = () => {
     loadItems,
     handleAdd,
     handleToggle,
+    handleUpdate,
     handleDelete,
     handleFactoryReset,
   } as const;

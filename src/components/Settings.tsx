@@ -14,9 +14,19 @@ interface Props {
   theme: 'light' | 'dark' | 'highContrast';
   onThemeChange: (t: 'light' | 'dark' | 'highContrast') => void;
   onFactoryReset: () => Promise<void>;
+  extendedFunctions?: boolean;
+  onExtendedFunctionsChange?: (value: boolean) => void;
 }
 
-export default function Settings({ open, onClose, theme, onThemeChange, onFactoryReset }: Props) {
+export default function Settings({
+  open,
+  onClose,
+  theme,
+  onThemeChange,
+  onFactoryReset,
+  extendedFunctions = true,
+  onExtendedFunctionsChange,
+}: Props) {
   const { lang, setLang } = useLanguage();
   const { avatar, setAvatar } = useAvatar();
   const t = translations[lang];
@@ -31,6 +41,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
           <div style={{ marginBottom: 8 }}>{t.factoryResetConfirm}</div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
             <button
+              className="toast-action-button confirm"
               onClick={async () => {
                 toast.dismiss(toastObj.id);
                 try {
@@ -45,7 +56,6 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
               style={{
                 padding: '6px 10px',
                 borderRadius: 6,
-                border: 'none',
                 background: 'var(--danger)',
                 color: 'white',
                 fontWeight: 600,
@@ -56,21 +66,23 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
             </button>
 
             <button
+              className="toast-action-button cancel"
               onClick={() => toast.dismiss(toastObj.id)}
-              style={{
-                padding: '6px 10px',
-                borderRadius: 6,
-                border: '1px solid var(--input-border)',
-                background: 'var(--card)',
-                cursor: 'pointer',
-              }}
             >
               {t.cancel}
             </button>
           </div>
         </div>
       ),
-      { duration: Infinity },
+      {
+        duration: Infinity,
+        style: {
+          background: 'var(--card)',
+          color: 'var(--text-color)',
+          border: '1px solid var(--card-border)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+        },
+      },
     );
   };
 
@@ -328,6 +340,28 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
               </button>
             </div>
           </fieldset>
+        </section>
+
+        <section style={{ marginBottom: 12 }}>
+          <legend style={{ fontSize: 14, marginBottom: 8, color: 'var(--accent)' }}>
+            {t.extendedFunctions}
+          </legend>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.extendedFunctionsDesc}</div>
+            <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={extendedFunctions}
+                onChange={(e) => onExtendedFunctionsChange?.(e.target.checked)}
+                style={{ marginRight: 8, cursor: 'pointer' }}
+                aria-checked={extendedFunctions}
+                aria-label={extendedFunctions ? t.enabled : t.disabled}
+              />
+              <span style={{ fontSize: 12, fontWeight: 600 }}>
+                {extendedFunctions ? t.enabled : t.disabled}
+              </span>
+            </label>
+          </div>
         </section>
 
         <section style={{ marginBottom: 12 }}>

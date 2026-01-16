@@ -26,7 +26,7 @@ type DockProps = {
   dockHeight?: number;
 };
 
-function DockItem({
+const DockItem = React.memo(function DockItem({
   children,
   className = '',
   onClick,
@@ -69,7 +69,9 @@ function DockItem({
       {children}
     </motion.div>
   );
-}
+});
+
+DockItem.displayName = 'DockItem';
 
 export default function Dock({
   active = 'all',

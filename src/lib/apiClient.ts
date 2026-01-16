@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const DEFAULT_BASE = 'http://localhost:5000';
-const BASE = (import.meta.env.VITE_API_URL as string) || DEFAULT_BASE;
+const BASE = (import.meta.env.VITE_API_URL as string) || 'http://localhost:5000';
 
 export interface ApiError {
   message: string;

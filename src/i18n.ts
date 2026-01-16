@@ -62,7 +62,7 @@ export const translations = {
     empty: {
       listEmptyTitle: 'Deine Liste ist leer',
       listEmptySub: 'Füge oben Produkte hinzu, die du einkaufen möchtest.',
-      noneBoughtTitle: 'Du hast noch keine Artikel gekauft',
+      noneBoughtTitle: 'Du hast noch keine Artikel gekauft!',
       noneBoughtSub: 'Vielleicht solltest Du mal einkaufen gehen',
       allBoughtTitle: 'Du Shopaholic! 🤑🛍️',
       allBoughtSub: 'Du hast bereits alle Artikel gekauft',

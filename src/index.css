@@ -199,11 +199,13 @@ body {
   overflow: hidden;
   position: relative;
   /* Wider container sized for a 21:9-like visual */
-  width: 100%;
-  /* ~21:9 ratio (approx) */
-  height: 346px;
-
-  border-radius: 14px;
+  width: 85%;
+  /* max-width: 255px; */
+  height: 255px;
+  min-height: 80%;
+  margin: 0 auto 12px;
+  /* aspect-ratio: 1.78/1; */
+  border-radius: 55px;
   /* Subtle elevated look */
   box-shadow:
     0 10px 30px rgba(2, 6, 23, 0.08),
@@ -251,8 +253,8 @@ body {
 
 @media (max-width: 480px) {
   .empty-illustration {
-    width: 180px;
-    height: 86px;
+    width: 186px;
+    height: 115px;
   }
   .empty-illustration img {
     width: 150%;

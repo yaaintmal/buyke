@@ -22,7 +22,7 @@ const redactMongoUri = (uri: string) => {
 export async function start(): Promise<http.Server> {
   await mongoose.connect(MONGO_URI);
 
-  const server = app.listen(PORT, () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`🛒 Server is running on port ${PORT} 🛍️`);
     console.log(`🛍️ MONGO_URI=${redactMongoUri(MONGO_URI)} 🛒`);
   });

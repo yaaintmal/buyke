@@ -5,6 +5,7 @@ import { useAvatar } from '../contexts/AvatarContext';
 import v1Preview from '../public/v1-1_need-input.webp';
 import v2Preview from '../public/v2-1_need-input.webp';
 import v3Preview from '../public/v3-1_need-input.webp';
+import './Settings.css';
 
 interface Props {
   open: boolean;
@@ -44,7 +45,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 30,
+        zIndex: 110, // ensure modal overlays the dock on small screens
       }}
     >
       <div
@@ -52,6 +53,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
         onClick={onClose}
       ></div>
       <div
+        className="settings-dialog"
         style={{
           position: 'relative',
           background: 'var(--card)',
@@ -220,11 +222,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                 }}
               >
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                  <img
-                    src={v1Preview}
-                    alt={t.avatarHamster}
-                    style={{ width: 64, height: 28, objectFit: 'cover', borderRadius: 6 }}
-                  />
+                  <img src={v1Preview} alt={t.avatarHamster} className="avatar-preview" />
                   <span style={{ fontSize: 13 }}>{t.avatarHamster}</span>
                 </span>
               </button>
@@ -243,11 +241,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                 }}
               >
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                  <img
-                    src={v2Preview}
-                    alt={t.avatarRobot}
-                    style={{ width: 64, height: 28, objectFit: 'cover', borderRadius: 6 }}
-                  />
+                  <img src={v2Preview} alt={t.avatarRobot} className="avatar-preview" />
                   <span style={{ fontSize: 13 }}>{t.avatarRobot}</span>
                 </span>
               </button>
@@ -266,11 +260,7 @@ export default function Settings({ open, onClose, theme, onThemeChange, onFactor
                 }}
               >
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                  <img
-                    src={v3Preview}
-                    alt={t.avatarBag}
-                    style={{ width: 64, height: 28, objectFit: 'cover', borderRadius: 6 }}
-                  />
+                  <img src={v3Preview} alt={t.avatarBag} className="avatar-preview" />
                   <span style={{ fontSize: 13 }}>{t.avatarBag}</span>
                 </span>
               </button>

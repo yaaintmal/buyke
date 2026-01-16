@@ -6,12 +6,12 @@ export interface IShoppingItem extends Document {
   createdAt: Date;
 }
 
-const ShoppingItemSchema: Schema = new Schema({
+const ShoppingItemSchema = new Schema({
   name: { type: String, required: true },
   bought: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
 
-const ShoppingItem = mongoose.model<IShoppingItem>('ShoppingItem', ShoppingItemSchema);
+const ShoppingItem = (mongoose as any).model('ShoppingItem', ShoppingItemSchema);
 
 export default ShoppingItem;

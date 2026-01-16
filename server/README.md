@@ -16,6 +16,14 @@ Optional / recommended:
 - `FRONTEND_ORIGINS` — comma-separated origin list allowed for CORS (default `http://localhost:5173`)
 - `NODE_ENV` — `development|production|test` (defaults to `development`)
 - `DEBUG` — debug namespace for debugging
+- `RATE_LIMIT_WINDOW_MS` — Optional; override the rate limiter window in milliseconds (default: 900000, i.e. 15 minutes)
+- `RATE_LIMIT_MAX` — Optional; general max requests per window (default: 200)
+- `RATE_LIMIT_MAX_WRITE` — Optional; stricter max for write operations (POST/PUT/DELETE) per window (default: 60)
+
+Test-only overrides (useful for fast integration tests):
+
+- `RATE_LIMIT_MAX_TEST` — Number of allowed requests during tests for general endpoints (default small number used when `NODE_ENV=test`).
+- `RATE_LIMIT_MAX_TEST_WRITE` — Number of allowed write requests during tests (default small number used when `NODE_ENV=test`).
 
 ## Health check
 

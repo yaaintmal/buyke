@@ -41,6 +41,7 @@ export default function Settings({
           <div style={{ marginBottom: 8 }}>{t.factoryResetConfirm}</div>
           <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
             <button
+              className="toast-action-button confirm"
               onClick={async () => {
                 toast.dismiss(toastObj.id);
                 try {
@@ -55,7 +56,6 @@ export default function Settings({
               style={{
                 padding: '6px 10px',
                 borderRadius: 6,
-                border: 'none',
                 background: 'var(--danger)',
                 color: 'white',
                 fontWeight: 600,
@@ -66,21 +66,23 @@ export default function Settings({
             </button>
 
             <button
+              className="toast-action-button cancel"
               onClick={() => toast.dismiss(toastObj.id)}
-              style={{
-                padding: '6px 10px',
-                borderRadius: 6,
-                border: '1px solid var(--input-border)',
-                background: 'var(--card)',
-                cursor: 'pointer',
-              }}
             >
               {t.cancel}
             </button>
           </div>
         </div>
       ),
-      { duration: Infinity },
+      {
+        duration: Infinity,
+        style: {
+          background: 'var(--card)',
+          color: 'var(--text-color)',
+          border: '1px solid var(--card-border)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+        },
+      },
     );
   };
 
@@ -352,9 +354,11 @@ export default function Settings({
                 checked={extendedFunctions}
                 onChange={(e) => onExtendedFunctionsChange?.(e.target.checked)}
                 style={{ marginRight: 8, cursor: 'pointer' }}
+                aria-checked={extendedFunctions}
+                aria-label={extendedFunctions ? t.enabled : t.disabled}
               />
               <span style={{ fontSize: 12, fontWeight: 600 }}>
-                {extendedFunctions ? 'Enabled' : 'Disabled'}
+                {extendedFunctions ? t.enabled : t.disabled}
               </span>
             </label>
           </div>

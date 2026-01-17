@@ -8,6 +8,7 @@ const proxyTarget = process.env.VITE_API_URL || 'http://localhost:5000';
 export default defineConfig({
   plugins: [react()],
   server: {
+    allowedHosts: ['blickbuy.malick.cloud'],
     proxy: {
       // Proxy /items to local backend in development to avoid CORS
       '/items': {

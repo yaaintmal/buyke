@@ -12,6 +12,7 @@ import {
 import SharedListPreview from './components/SharedListPreview';
 import ChooseListModal from './components/ChooseListModal';
 import { translations } from './i18n';
+import type { CreateItemPayload } from './api';
 // Components
 import Header from './components/Header';
 import AddItemForm from './components/AddItemForm';
@@ -27,15 +28,7 @@ import { DEFAULT_LANGUAGE } from './config';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
-  const [sharedPreviewItems, setSharedPreviewItems] = useState<
-    | {
-        name: string;
-        quantity?: number;
-        unit?: string;
-        category?: string;
-      }[]
-    | null
-  >(null);
+  const [sharedPreviewItems, setSharedPreviewItems] = useState<CreateItemPayload[] | null>(null);
   useEffect(() => {
     try {
       const url = new URL(window.location.href);
@@ -44,13 +37,7 @@ function App() {
         const parsed = parseSharedPayload(token);
         if (parsed && parsed.length > 0) {
           // schedule setState to avoid synchronous effect update
-          setTimeout(
-            () =>
-              setSharedPreviewItems(
-                parsed as { name: string; quantity?: number; unit?: string; category?: string }[],
-              ),
-            0,
-          );
+          setTimeout(() => setSharedPreviewItems(parsed as unknown as CreateItemPayload[]), 0);
         }
       }
     } catch {
@@ -99,9 +86,7 @@ function App() {
     }
   };
 
-  const handleImport = async (
-    importItems: { name: string; quantity?: number; unit?: string; category?: string }[],
-  ) => {
+  const handleImport = async (importItems: CreateItemPayload[]) => {
     try {
       for (const it of importItems) {
         await handleAdd({

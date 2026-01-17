@@ -3,7 +3,7 @@ import { Plus, Loader2, ChevronDown } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../i18n';
 import { UNITS, CATEGORIES } from '../constants/shopping';
-import type { CreateItemPayload } from '../api';
+import type { CreateItemPayload, Unit } from '../api';
 
 interface Props {
   onAdd: (payload: CreateItemPayload) => Promise<void>;
@@ -17,7 +17,7 @@ export default function AddItemForm({ onAdd, adding, extendedFunctions = true }:
 
   const [value, setValue] = useState('');
   const [quantity, setQuantity] = useState<string>('1');
-  const [unit, setUnit] = useState<string>('pcs');
+  const [unit, setUnit] = useState<Unit>('pcs');
   const [category, setCategory] = useState<string>('Other');
   const [expanded, setExpanded] = useState(false);
 
@@ -101,7 +101,7 @@ export default function AddItemForm({ onAdd, adding, extendedFunctions = true }:
               <select
                 id="unit-select"
                 value={unit}
-                onChange={(e) => setUnit(e.target.value)}
+                onChange={(e) => setUnit(e.target.value as Unit)}
                 className="select"
               >
                 {UNITS.map((u) => (

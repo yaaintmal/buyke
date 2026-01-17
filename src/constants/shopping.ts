@@ -1,12 +1,11 @@
 // Shopping list constants: units and categories
 
 import { UNIT_VALUES, UNIT_LABELS } from '../../shared/units';
-import type { Unit as SharedUnit } from '../../shared/units';
 
 export const UNITS = UNIT_VALUES.map((value) => ({
   value,
   label: UNIT_LABELS[value] ?? value,
-})) as const;
+}));
 
 // Default category order for display (store layout order)
 export const DEFAULT_CATEGORY_ORDER = [

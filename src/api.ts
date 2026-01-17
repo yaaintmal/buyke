@@ -1,6 +1,8 @@
 import { api } from './lib/apiClient';
 import type { Unit } from '../shared/units';
 
+export type { Unit };
+
 export interface ShoppingItem {
   _id: string;
   name: string;

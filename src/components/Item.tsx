@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Check, Trash2, Edit2, X } from 'lucide-react';
-import type { ShoppingItem, UpdateItemPayload } from '../api';
+import type { ShoppingItem, UpdateItemPayload, Unit } from '../api';
 import { useLanguage } from '../contexts/LanguageContext';
 import { translations } from '../i18n';
 import { UNITS, CATEGORIES } from '../constants/shopping';
@@ -115,7 +115,7 @@ export default function Item({
                   />
                   <select
                     value={editUnit}
-                    onChange={(e) => setEditUnit(e.target.value)}
+                    onChange={(e) => setEditUnit(e.target.value as Unit)}
                     className="select"
                   >
                     {UNITS.map((u) => (

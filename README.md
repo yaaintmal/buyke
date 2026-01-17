@@ -80,8 +80,9 @@ Built as a portfolio showcase, this project emphasizes **Clean Code** principles
    ```
 
 2. **Configuration**
-   - Frontend: Configured in `src/lib/apiClient.ts`, defaults to `http://localhost:5000`.
-   - Backend: Default assumes MongoDB at `mongodb://localhost:27017/buyke` and runs on port 5000.
+   - **Environment**: Copy `.env.example` to `.env` (Frontend) and `server/.env.example` to `server/.env.development` (Backend).
+   - **Frontend**: Connects to `http://localhost:5000` by default (overridable via `VITE_API_URL`).
+   - **Backend**: Listens on port 5000 and expects MongoDB at `mongodb://localhost:27017/buyke`.
 
 3. **Running the App**
 
@@ -143,7 +144,6 @@ Das Projekt dient als Referenz für **professionelle Webentwicklung** mit dem ME
 
 <img width="1172" height="1184" alt="performance_test-2026-17-01" src="https://github.com/user-attachments/assets/e88df8e7-077e-4af7-99c7-870011dadb1c" />
 
-
 ### 🚀 Startanleitung
 
 1. **Installation**
@@ -153,7 +153,11 @@ Das Projekt dient als Referenz für **professionelle Webentwicklung** mit dem ME
    cd server && npm install  # Backend
    ```
 
-2. **Starten**
+2. **Konfiguration**
+   - **Frontend**: Kopieren Sie `.env.example` zu `.env` (Standard-API: `http://localhost:5000`).
+   - **Backend**: Kopieren Sie `server/.env.example` zu `server/.env.development`.
+
+3. **Starten**
 
    ```bash
    # Backend

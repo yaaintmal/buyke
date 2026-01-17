@@ -55,6 +55,12 @@ export const buildShareUrl = (token: string) => {
   return url.toString();
 };
 
+export const buildListUrl = (id: string) => {
+  const url = new URL(window.location.href);
+  url.searchParams.set('list', id);
+  return url.toString();
+};
+
 export const copyToClipboard = async (text: string): Promise<boolean> => {
   try {
     if (

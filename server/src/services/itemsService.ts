@@ -5,6 +5,7 @@ export interface CreateItemInput {
   quantity?: number;
   unit?: string;
   category?: string;
+  listId?: string | null;
 }
 
 export interface UpdateItemInput {
@@ -14,8 +15,9 @@ export interface UpdateItemInput {
   category?: string;
 }
 
-export const getAll = async (): Promise<IShoppingItem[]> => {
-  return ShoppingItem.find().sort({ createdAt: -1 });
+export const getAll = async (listId?: string): Promise<IShoppingItem[]> => {
+  const query = listId ? { listId } : {};
+  return ShoppingItem.find(query).sort({ createdAt: -1 });
 };
 
 export const createItem = async (input: CreateItemInput): Promise<IShoppingItem> => {
@@ -24,6 +26,7 @@ export const createItem = async (input: CreateItemInput): Promise<IShoppingItem>
     quantity: input.quantity ?? 1,
     unit: input.unit ?? 'pcs',
     category: input.category ?? 'Other',
+    listId: input.listId ?? null,
   });
   await item.save();
   return item;
@@ -40,6 +43,7 @@ export const deleteById = async (id: string): Promise<IShoppingItem | null> => {
   return ShoppingItem.findByIdAndDelete(id);
 };
 
-export const deleteAll = async (): Promise<void> => {
-  await ShoppingItem.deleteMany({});
+export const deleteAll = async (listId?: string): Promise<void> => {
+  const query = listId ? { listId } : {};
+  await ShoppingItem.deleteMany(query);
 };

@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import type { ShoppingItem, CreateItemPayload, UpdateItemPayload } from '../api';
 import { fetchItems, createItem, updateItemStatus, deleteItem, deleteAllItems } from '../api';
 
-export const useShoppingList = () => {
+export const useShoppingList = (listId?: string) => {
   const [items, setItems] = useState<(ShoppingItem & { pending?: boolean })[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -11,7 +11,7 @@ export const useShoppingList = () => {
   const loadItems = useCallback(async () => {
     try {
       setLoading(true);
-      const data = await fetchItems();
+      const data = await fetchItems(listId);
       setItems(data);
       setError(null);
     } catch (err) {
@@ -20,40 +20,44 @@ export const useShoppingList = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [listId]);
 
   useEffect(() => {
     loadItems();
   }, [loadItems]);
 
-  const handleAdd = useCallback(async (payload: CreateItemPayload) => {
-    const tempId = `pending-${Date.now()}`;
-    const pendingItem: ShoppingItem & { pending?: boolean } = {
-      _id: tempId,
-      name: payload.name,
-      bought: false,
-      quantity: payload.quantity ?? 1,
-      unit: payload.unit ?? 'pcs',
-      category: payload.category ?? 'Other',
-      createdAt: new Date().toISOString(),
-      pending: true,
-    };
+  const handleAdd = useCallback(
+    async (payload: CreateItemPayload) => {
+      const tempId = `pending-${Date.now()}`;
+      const pendingItem: ShoppingItem & { pending?: boolean } = {
+        _id: tempId,
+        name: payload.name,
+        bought: false,
+        quantity: payload.quantity ?? 1,
+        unit: payload.unit ?? 'pcs',
+        category: payload.category ?? 'Other',
+        createdAt: new Date().toISOString(),
+        pending: true,
+      };
 
-    try {
-      setAdding(true);
-      setItems((prev) => [pendingItem, ...prev]);
+      try {
+        setAdding(true);
+        setItems((prev) => [pendingItem, ...prev]);
 
-      const newItem = await createItem(payload);
+        const payloadWithList = { ...payload, listId };
+        const newItem = await createItem(payloadWithList);
 
-      setItems((prev) => prev.map((it) => (it._id === tempId ? newItem : it)));
-    } catch (err) {
-      console.error(err);
-      setItems((prev) => prev.filter((it) => it._id !== tempId));
-      setError('Failed to add item.');
-    } finally {
-      setAdding(false);
-    }
-  }, []);
+        setItems((prev) => prev.map((it) => (it._id === tempId ? newItem : it)));
+      } catch (err) {
+        console.error(err);
+        setItems((prev) => prev.filter((it) => it._id !== tempId));
+        setError('Failed to add item.');
+      } finally {
+        setAdding(false);
+      }
+    },
+    [listId],
+  );
 
   const handleToggle = useCallback(
     async (id: string, currentStatus: boolean) => {
@@ -102,7 +106,7 @@ export const useShoppingList = () => {
   const handleFactoryReset = useCallback(async () => {
     try {
       setLoading(true);
-      await deleteAllItems();
+      await deleteAllItems(listId);
       setItems([]);
       setError(null);
     } catch (err) {
@@ -113,7 +117,7 @@ export const useShoppingList = () => {
       // ensure server state matches
       loadItems();
     }
-  }, [loadItems]);
+  }, [loadItems, listId]);
 
   return {
     items,

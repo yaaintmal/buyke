@@ -120,7 +120,7 @@ export default function Item({
                   >
                     {UNITS.map((u) => (
                       <option key={u.value} value={u.value}>
-                        {u.label}
+                        {t.units[u.value as keyof typeof t.units] || u.label}
                       </option>
                     ))}
                   </select>
@@ -131,7 +131,7 @@ export default function Item({
                   >
                     {CATEGORIES.map((c) => (
                       <option key={c.value} value={c.value}>
-                        {c.label}
+                        {t.categories[c.value as keyof typeof t.categories] || c.label}
                       </option>
                     ))}
                   </select>

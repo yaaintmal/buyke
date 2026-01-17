@@ -3,12 +3,14 @@ import { useTheme } from '../contexts/ThemeContext';
 
 export type FilterType = 'all' | 'open' | 'bought';
 
+import { DEFAULT_EXTENDED_FUNCTIONS } from '../config';
+
 const getInitialExtendedFunctions = (): boolean => {
   try {
     const saved = localStorage.getItem('extendedFunctions');
-    return saved !== null ? JSON.parse(saved) : true;
+    return saved !== null ? JSON.parse(saved) : DEFAULT_EXTENDED_FUNCTIONS;
   } catch {
-    return true;
+    return DEFAULT_EXTENDED_FUNCTIONS;
   }
 };
 
@@ -16,6 +18,20 @@ export const useUIState = () => {
   const [filter, setFilter] = useState<FilterType>('all');
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [extendedFunctions, setExtendedFunctions] = useState<boolean>(getInitialExtendedFunctions);
+  const [currentListId, setCurrentListId] = useState<string | null>(() => {
+    // Check URL first
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      const urlId = url.searchParams.get('list');
+      if (urlId) return urlId;
+    }
+    try {
+      const saved = localStorage.getItem('listId');
+      return saved || null;
+    } catch {
+      return null;
+    }
+  });
 
   // theme is managed by ThemeProvider; expose the provider's values via the hook
   const { theme, setTheme } = useTheme();
@@ -25,10 +41,12 @@ export const useUIState = () => {
     try {
       localStorage.setItem('theme', theme);
       localStorage.setItem('extendedFunctions', JSON.stringify(extendedFunctions));
+      if (currentListId) localStorage.setItem('listId', currentListId);
+      else localStorage.removeItem('listId');
     } catch {
       // ignore
     }
-  }, [theme, extendedFunctions]);
+  }, [theme, extendedFunctions, currentListId]);
 
   return {
     filter,
@@ -39,6 +57,8 @@ export const useUIState = () => {
     setTheme,
     extendedFunctions,
     setExtendedFunctions,
+    currentListId,
+    setCurrentListId,
   } as const;
 };
 

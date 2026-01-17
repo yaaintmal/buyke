@@ -70,78 +70,156 @@ body {
 }
 
 .card-header {
-  /* Mint green gradient for light mode */
-  background: linear-gradient(
-    135deg,
-    rgba(52, 211, 153, 0.9) 0%,
-    rgba(5, 150, 105, 0.95) 50%,
-    rgba(4, 120, 87, 1) 100%
-  );
-  padding: 24px;
+  /* Gradient driven by theme variables */
+  background: var(--header-gradient);
+  padding: 16px 20px;
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 10;
 }
 
-/* Header gradient is driven by theme variables */
-.card-header {
-  background: var(--header-gradient);
-}
 .header-left {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
+  min-width: 0; /* allows text truncation */
 }
 .logo {
   background: rgba(255, 255, 255, 0.2);
-  padding: 8px;
-  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(4px);
+  flex-shrink: 0;
+}
+.logo .icon {
+  width: 20px;
+  height: 20px;
+}
+.header-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+  min-width: 0;
 }
 .title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   margin: 0;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+.slogan {
+  font-size: 11px;
+  opacity: 0.85;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* List ID Badge */
+.list-id-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px 8px 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: monospace;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.2s;
+}
+.list-id-badge:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+.list-id-badge span {
+  opacity: 0.9;
+  letter-spacing: 0.5px;
+}
+.list-id-copy {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  cursor: pointer;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.list-id-copy:hover {
+  background: white;
+  color: var(--accent);
+  transform: scale(1.1);
+}
+.list-id-copy .icon {
+  width: 10px;
+  height: 10px;
+}
+
 .count {
   color: rgba(255, 255, 255, 0.9);
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   background: rgba(255, 255, 255, 0.15);
-  padding: 4px 10px;
-  border-radius: 20px;
-  backdrop-filter: blur(4px);
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 
 .share-button {
-  padding: 6px 8px;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.2);
   border: none;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.9);
   cursor: pointer;
-  font-weight: 600;
-  display: inline-flex;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
   align-items: center;
-  gap: 8px;
-}
-.share-button .icon {
-  width: 18px;
-  height: 18px;
-  opacity: 0.9;
+  justify-content: center;
+  transition: all 0.2s;
 }
 .share-button:hover {
-  background: rgba(255, 255, 255, 0.04);
-  color: white;
+  background: white;
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
+.share-button:active {
+  transform: translateY(0);
+}
+.share-button .icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* Header gradient is driven by theme variables */
+/* Removed old definition to avoid duplicate overwrite */
+
 /* Toast action button improvements */
 .toast-action-button {
   padding: 6px 10px;
@@ -826,6 +904,39 @@ input:focus-visible {
   margin-top: 12px;
 }
 
+/* Modal-specific button styles for high contrast and readability */
+.shared-card .action-button {
+  opacity: 1; /* always visible in modal */
+  background: var(--input-bg);
+  color: var(--text-color);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s,
+    border-color 0.12s,
+    transform 0.06s;
+}
+.shared-card .action-button.primary {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent-dark, rgba(0, 0, 0, 0.08));
+}
+.shared-card .action-button:hover {
+  transform: translateY(-1px);
+}
+.shared-card .action-button.cancel-button {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+}
+.shared-card .action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Theme: dark overrides */
 .theme-dark {
   --bg: #0f1724; /* zinc/dark gray */
@@ -872,4 +983,338 @@ input:focus-visible {
 .app-footer a:hover {
   color: var(--text-color);
   border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+/* Intro Modal / Choose List Modal Redesign */
+.intro-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3); /* Lighter backdrop */
+  backdrop-filter: blur(8px); /* Heavy blur for modern feel */
+  z-index: 200;
+  padding: 16px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.intro-card {
+  background: var(--card); /* Uses theme card bg */
+  border-radius: 24px;
+  box-shadow:
+    0 20px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px var(--card-border);
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.intro-header {
+  padding: 32px 32px 24px;
+  text-align: center;
+}
+.intro-header h2 {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+.intro-header p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.intro-content {
+  padding: 0 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.intro-option {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.intro-option:focus-within,
+.intro-option:hover {
+  border-color: var(--accent);
+  background: var(--bg); /* Slightly lighter/different than input-bg */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -8px var(--accent-12);
+}
+
+.intro-option-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.intro-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--accent-12);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.intro-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+.intro-actions {
+  display: flex;
+  gap: 10px;
+}
+.intro-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text-color);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+.intro-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-12);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: white; /* Always white on accent */
+  border: none;
+  font-weight: 600;
+  padding: 0 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px; /* match input height */
+}
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+.btn-primary:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.intro-footer {
+  padding: 16px 32px;
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid var(--card-border);
+  text-align: center;
+}
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: all 0.2s;
+}
+.btn-text:hover {
+  color: var(--text-color);
+  text-decoration-color: var(--muted);
+}
+
+/* Modern Header Styles */
+.app-header {
+  background: var(--header-gradient);
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px 20px;
+  gap: 16px;
+  color: white;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-logo {
+  width: 44px;
+  height: 44px;
+  background: white;
+  color: var(--accent);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.brand-slogan {
+  font-size: 13px;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* On mobile, actions are grouped in a container */
+.app-header .header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.id-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.id-badge:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.id-label {
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.id-value {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.id-icon {
+  opacity: 0.8;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.status-count {
+  font-weight: 700;
+  background: white;
+  color: var(--accent);
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 11px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-label {
+  opacity: 0.9;
+  font-size: 12px;
+}
+
+@media (min-width: 640px) {
+  .app-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+  }
+
+  .app-header .header-actions {
+    background: transparent;
+    padding: 0;
+    gap: 12px;
+  }
+
+  .id-badge {
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  .status-pill {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 6px 10px;
+  }
 }

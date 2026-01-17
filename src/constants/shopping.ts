@@ -1,18 +1,12 @@
 // Shopping list constants: units and categories
 
-export const UNITS = [
-  { value: 'pcs', label: 'pieces' },
-  { value: 'ml', label: 'ml' },
-  { value: 'l', label: 'liters' },
-  { value: 'g', label: 'grams' },
-  { value: 'kg', label: 'kg' },
-  { value: 'mg', label: 'mg' },
-  { value: 'oz', label: 'oz' },
-  { value: 'lb', label: 'lb' },
-  { value: 'cup', label: 'cups' },
-  { value: 'tbsp', label: 'tbsp' },
-  { value: 'tsp', label: 'tsp' },
-] as const;
+import { UNIT_VALUES, UNIT_LABELS } from '../../shared/units';
+import type { Unit as SharedUnit } from '../../shared/units';
+
+export const UNITS = UNIT_VALUES.map((value) => ({
+  value,
+  label: UNIT_LABELS[value] ?? value,
+})) as const;
 
 // Default category order for display (store layout order)
 export const DEFAULT_CATEGORY_ORDER = [

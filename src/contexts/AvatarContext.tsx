@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { DEFAULT_AVATAR } from '../config';
 
 export type AvatarVersion = 'v1' | 'v2' | 'v3';
 const StorageKey = 'avatarVersion';
@@ -6,7 +7,7 @@ const StorageKey = 'avatarVersion';
 const AvatarContext = createContext<{
   avatar: AvatarVersion;
   setAvatar: (v: AvatarVersion) => void;
-}>({ avatar: 'v1', setAvatar: () => {} });
+}>({ avatar: DEFAULT_AVATAR, setAvatar: () => {} });
 
 export const AvatarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [avatar, setAvatar] = useState<AvatarVersion>(() => {
@@ -16,7 +17,7 @@ export const AvatarProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch {
       // ignore
     }
-    return 'v1';
+    return DEFAULT_AVATAR;
   });
 
   useEffect(() => {

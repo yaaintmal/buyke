@@ -10,6 +10,7 @@ import {
   copyToClipboard,
 } from './lib/share';
 import SharedListPreview from './components/SharedListPreview';
+import ChooseListModal from './components/ChooseListModal';
 import { translations } from './i18n';
 // Components
 import Header from './components/Header';
@@ -22,21 +23,10 @@ import Footer from './components/Footer';
 // Context Providers
 import { LanguageProvider } from './contexts/LanguageContext';
 import { AvatarProvider } from './contexts/AvatarContext';
+import { DEFAULT_LANGUAGE } from './config';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
-  const {
-    items,
-    loading,
-    error,
-    adding,
-    handleAdd,
-    handleToggle,
-    handleUpdate,
-    handleDelete,
-    handleFactoryReset,
-  } = useShoppingList();
-
   const [sharedPreviewItems, setSharedPreviewItems] = useState<
     | {
         name: string;
@@ -74,7 +64,7 @@ function App() {
       const url = buildShareUrl(token);
       // try clipboard API with fallback
       const copied = await copyToClipboard(url);
-      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? 'en';
+      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? DEFAULT_LANGUAGE;
       if (copied) {
         toast.success(translations[langKey].shareSuccess);
       } else {
@@ -84,8 +74,28 @@ function App() {
       }
     } catch (e) {
       console.error(e);
-      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? 'en';
+      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? DEFAULT_LANGUAGE;
       toast.error(translations[langKey].shareError);
+    }
+  };
+
+  const handleCopyListLink = async () => {
+    if (!currentListId) return;
+    try {
+      const url = currentListId;
+      const copied = await copyToClipboard(url);
+      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? DEFAULT_LANGUAGE;
+      if (copied) {
+        toast.success(translations[langKey].copyListSuccess);
+      } else {
+        // Fallback prompt
+        window.prompt(translations[langKey].share, url);
+        toast.success(translations[langKey].copyListSuccess);
+      }
+    } catch (e) {
+      console.error(e);
+      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? DEFAULT_LANGUAGE;
+      toast.error(translations[langKey].copyListError);
     }
   };
 
@@ -101,7 +111,7 @@ function App() {
           category: it.category ?? 'Other',
         });
       }
-      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? 'en';
+      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? DEFAULT_LANGUAGE;
       toast.success(translations[langKey].importSuccess);
       setSharedPreviewItems(null);
       const url = new URL(window.location.href);
@@ -109,7 +119,7 @@ function App() {
       window.history.replaceState({}, document.title, url.toString());
     } catch (e) {
       console.error(e);
-      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? 'en';
+      const langKey = (localStorage.getItem('language') as 'en' | 'de') ?? DEFAULT_LANGUAGE;
       toast.error(translations[langKey].importError);
     }
   };
@@ -122,7 +132,31 @@ function App() {
     setTheme,
     extendedFunctions,
     setExtendedFunctions,
+    currentListId,
+    setCurrentListId,
   } = useUIState();
+
+  // show the choose-list modal on every page load until the user dismisses or selects a list this session
+  // If we are loading from a URL with list ID, start with modal closed
+  const [showChooseModal, setShowChooseModal] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('list')) return false;
+    }
+    return true;
+  });
+
+  const {
+    items,
+    loading,
+    error,
+    adding,
+    handleAdd,
+    handleToggle,
+    handleUpdate,
+    handleDelete,
+    handleFactoryReset,
+  } = useShoppingList(currentListId ?? undefined);
 
   const filteredItems = items.filter((it) => {
     if (filter === 'all') return true;
@@ -135,13 +169,27 @@ function App() {
       <AvatarProvider>
         <div className="app-root">
           <div className="card">
-            <Header openCount={items.filter((i) => !i.bought).length} onShare={handleShare} />
+            <Header
+              openCount={items.filter((i) => !i.bought).length}
+              onShare={handleShare}
+              listId={currentListId ?? undefined}
+              onCopyList={handleCopyListLink}
+            />
 
             <main>
               <AddItemForm
                 onAdd={handleAdd}
                 adding={adding}
                 extendedFunctions={extendedFunctions}
+              />
+
+              <ChooseListModal
+                open={showChooseModal}
+                onClose={() => setShowChooseModal(false)}
+                onListSelected={(id) => {
+                  setCurrentListId(id);
+                  setShowChooseModal(false);
+                }}
               />
 
               <div className="banner-area" aria-live="polite">

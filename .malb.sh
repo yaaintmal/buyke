@@ -7,9 +7,8 @@ echo "[MAL] Removing root node_modules and lock file..."
 rm -rf node_modules package-lock.json || true
 
 echo "[MAL] Cleaning frontend"
-cd frontend
 rm -rf node_modules package-lock.json || true
-cd ../backend
+cd server/
 rm -rf node_modules package-lock.json || true
 cd ../
 

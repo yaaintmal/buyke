@@ -167,5 +167,5 @@ Das Projekt dient als Referenz für **professionelle Webentwicklung** mit dem ME
 
 ---
 
-**Author**: Malone  
+**Author**: Malick
 **License**: MIT

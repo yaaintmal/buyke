@@ -1,0 +1,136 @@
+import { useEffect, useState, useCallback } from 'react';
+import type { ShoppingItem, CreateItemPayload, UpdateItemPayload } from '../api';
+import { fetchItems, createItem, updateItemStatus, deleteItem, deleteAllItems } from '../api';
+
+export const useShoppingList = (listId?: string) => {
+  const [items, setItems] = useState<(ShoppingItem & { pending?: boolean })[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [adding, setAdding] = useState<boolean>(false);
+
+  const loadItems = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await fetchItems(listId);
+      setItems(data);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to load items. Is the backend running?');
+    } finally {
+      setLoading(false);
+    }
+  }, [listId]);
+
+  useEffect(() => {
+    loadItems();
+  }, [loadItems]);
+
+  const handleAdd = useCallback(
+    async (payload: CreateItemPayload) => {
+      const tempId = `pending-${Date.now()}`;
+      const pendingItem: ShoppingItem & { pending?: boolean } = {
+        _id: tempId,
+        name: payload.name,
+        bought: false,
+        quantity: payload.quantity ?? 1,
+        unit: payload.unit ?? 'pcs',
+        category: payload.category ?? 'Other',
+        createdAt: new Date().toISOString(),
+        pending: true,
+      };
+
+      try {
+        setAdding(true);
+        setItems((prev) => [pendingItem, ...prev]);
+
+        const payloadWithList = { ...payload, listId };
+        const newItem = await createItem(payloadWithList);
+
+        setItems((prev) => prev.map((it) => (it._id === tempId ? newItem : it)));
+      } catch (err) {
+        console.error(err);
+        setItems((prev) => prev.filter((it) => it._id !== tempId));
+        setError('Failed to add item.');
+      } finally {
+        setAdding(false);
+      }
+    },
+    [listId],
+  );
+
+  const handleToggle = useCallback(
+    async (id: string, currentStatus: boolean) => {
+      try {
+        setItems((prev) =>
+          prev.map((item) => (item._id === id ? { ...item, bought: !currentStatus } : item)),
+        );
+        await updateItemStatus(id, { bought: !currentStatus });
+      } catch (err) {
+        console.error(err);
+        setError('Failed to update item.');
+        loadItems();
+      }
+    },
+    [loadItems],
+  );
+
+  const handleUpdate = useCallback(
+    async (id: string, updates: UpdateItemPayload) => {
+      try {
+        setItems((prev) => prev.map((item) => (item._id === id ? { ...item, ...updates } : item)));
+        await updateItemStatus(id, updates);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to update item.');
+        loadItems();
+      }
+    },
+    [loadItems],
+  );
+
+  const handleDelete = useCallback(
+    async (id: string) => {
+      try {
+        setItems((prev) => prev.filter((item) => item._id !== id));
+        await deleteItem(id);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to delete item.');
+        loadItems();
+      }
+    },
+    [loadItems],
+  );
+
+  const handleFactoryReset = useCallback(async () => {
+    try {
+      setLoading(true);
+      await deleteAllItems(listId);
+      setItems([]);
+      setError(null);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to reset items.');
+    } finally {
+      setLoading(false);
+      // ensure server state matches
+      loadItems();
+    }
+  }, [loadItems, listId]);
+
+  return {
+    items,
+    loading,
+    error,
+    adding,
+    loadItems,
+    handleAdd,
+    handleToggle,
+    handleUpdate,
+    handleDelete,
+    handleFactoryReset,
+  } as const;
+};
+
+export default useShoppingList;

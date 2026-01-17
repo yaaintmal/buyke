@@ -52,11 +52,19 @@ export default function ChooseListModal({ open, onClose, onListSelected }: Props
   };
 
   return (
-    <div className="intro-modal-overlay" role="dialog" aria-modal="true">
+    <div
+      className="intro-modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="choose-list-title"
+      aria-describedby="choose-list-desc"
+    >
       <div className="intro-card">
         <header className="intro-header">
-          <h2>{t.createNewList}</h2>
-          <p>{t.startFreshOrJoin || 'Create a new list or join an existing one.'}</p>
+          <h2 id="choose-list-title">{t.createNewList}</h2>
+          <p id="choose-list-desc">
+            {t.startFreshOrJoin || 'Create a new list or join an existing one.'}
+          </p>
         </header>
 
         <div className="intro-content">

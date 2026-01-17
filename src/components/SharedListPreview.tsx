@@ -13,9 +13,14 @@ export default function SharedListPreview({ items, onImport, onClose }: Props) {
   const t = translations[lang];
 
   return (
-    <div className="shared-overlay" role="dialog" aria-modal="true">
+    <div
+      className="shared-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="shared-preview-title"
+    >
       <div className="shared-card">
-        <h3>{t.sharedListTitle}</h3>
+        <h3 id="shared-preview-title">{t.sharedListTitle}</h3>
         <ul>
           {items.map((it, idx) => (
             <li key={idx} className="shared-item">

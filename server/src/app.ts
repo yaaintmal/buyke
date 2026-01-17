@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import itemsRouter from './routes/items';
+import listsRouter from './routes/lists';
 // middleware
 import { errorHandler } from './middleware/errorHandler';
 import { requestLogger } from './middleware/requestLogger';
@@ -33,6 +34,7 @@ app.use(requestLogger);
 
 // Routes
 app.use('/items', itemsRouter);
+app.use('/lists', listsRouter);
 
 // Health
 app.get('/health', (_req, res) => {

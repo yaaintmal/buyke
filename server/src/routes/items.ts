@@ -8,7 +8,7 @@ import { generalLimiter, strictLimiter } from '../middleware/rateLimiter';
 // apply a general limiter to all /items requests
 router.use(generalLimiter);
 
-router.get('/', controller.getItems);
+router.get('/', controller.getItems); // supports optional ?listId= query param
 // stricter limits for write operations
 router.post('/', strictLimiter, controller.createItem);
 router.put('/:id', strictLimiter, controller.updateItem);

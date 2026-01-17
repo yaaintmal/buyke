@@ -2,10 +2,12 @@ import { Request, Response, NextFunction } from 'express';
 import * as service from '../services/itemsService';
 import { createItemSchema, updateItemSchema, idParamSchema } from '../schemas/itemsSchema';
 import { HttpError } from '../middleware/errorHandler';
+import { normalizeUnit } from '../shared/units';
 
-export const getItems = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const getItems = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const items = await service.getAll();
+    const listId = req.query.listId as string | undefined;
+    const items = await service.getAll(listId);
     res.json(items);
   } catch (err) {
     next(err);
@@ -18,6 +20,12 @@ export const createItem = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
+    // normalize unit aliases to canonical values before validation
+    if (req.body && req.body.unit) {
+      const normalized = normalizeUnit(req.body.unit);
+      if (normalized) req.body.unit = normalized;
+    }
+
     const payload = createItemSchema.parse(req.body);
     const item = await service.createItem(payload);
     res.status(201).json(item);
@@ -33,6 +41,13 @@ export const updateItem = async (
 ): Promise<void> => {
   try {
     const { id } = idParamSchema.parse(req.params);
+
+    // normalize unit aliases to canonical values before validation
+    if (req.body && req.body.unit) {
+      const normalized = normalizeUnit(req.body.unit);
+      if (normalized) req.body.unit = normalized;
+    }
+
     const updates = updateItemSchema.parse(req.body);
 
     const updated = await service.updateStatus(id, updates);
@@ -64,12 +79,13 @@ export const deleteItem = async (
 };
 
 export const deleteAllItems = async (
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    await service.deleteAll();
+    const listId = req.query.listId as string | undefined;
+    await service.deleteAll(listId);
     res.json({ message: 'All items deleted successfully' });
   } catch (err) {
     next(err);

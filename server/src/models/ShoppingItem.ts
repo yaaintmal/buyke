@@ -15,6 +15,7 @@ const ShoppingItemSchema = new Schema({
   quantity: { type: Number, default: 1, min: 0.1 },
   unit: { type: String, default: 'pcs' },
   category: { type: String, default: 'Other' },
+  listId: { type: String, default: null, index: true },
   createdAt: { type: Date, default: Date.now },
 });
 

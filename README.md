@@ -1,131 +1,171 @@
-# Einkaufsliste (Buyke - Just buy it!)
+# Buyke - Smart Shopping List (React/Express/TS)
 
-Eine einfache React-Einkaufslisten-App, welche Express im Backend, sowie MongoDB als persistente Lösung zur Datenspeicherung verwendet.
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![React](https://img.shields.io/badge/React-18-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Express](https://img.shields.io/badge/Express-4-green)
 
-## Features
-
-- Einträge hinzufügen
-- Einträge als "gekauft" markieren (Durchgestrichen & Checkmark)
-- Einträge löschen
-- Modernes UI mit Lucide Icons (opt.: Tailwind CSS)
-
-## Voraussetzungen
-
-- Node.js (v14 oder höher empfohlen)
-- MongoDB (lokal installiert und laufend auf Standardport 27017)
-
-## Installation & Setup
-
-### 1. Repository klonen / Projekt öffnen
-
-Wir stellen sicher, dass wir uns im Projektverzeichnis befinden.
-
-### 2. Backend einrichten
-
-Das Backend befindet sich im Ordner `server`.
-
-```bash
-cd server
-npm install
-```
-
-### 3. Frontend einrichten
-
-Das Frontend befindet sich im Hauptverzeichnis.
-
-```bash
-# Falls noch nicht geschehen, im Hauptverzeichnis:
-npm install
-```
-
-## App starten
-
-Backend und Frontend werden parallel gestartet.
-
-### Backend starten
-
-Wir nutzen die native Environment-File Eindung von Node.js (>V20!) .
-
-- **Development:** Nutzt `.env.development`
-- **Production:** Nutzt `.env.production`
-
-Im Terminal führen wir aus:
-
-```bash
-cd server
-npm run dev
-```
-
-Der Server läuft standardmäßig auf `http://localhost:5000`.
-Stellen Sie sicher, dass Ihre lokale MongoDB-Instanz läuft (`mongod` oder als Service`).
+[🇺🇸 English Version](#english-version) | [🇩🇪 Deutsche Version](#deutsche-version)
 
 ---
 
-## Remote testing & health checks ✅
+<a name="english-version"></a>
 
-You can verify the server is reachable from another device on your network with a simple HTTP health check:
+## 🇺🇸 English Version
 
-- Using curl:
+### About The Project
 
-```bash
-curl http://<host-ip>:5000/health
-```
+**Buyke** is a modern, full-stack shopping list application designed to demonstrate robust architectural patterns, type safety, and clean user experience. It solves the common problem of synchronizing shopping needs across a household with a focus on usability (aliases, normalized units) and reliability.
 
-Expected response: `{"status":"ok"}`
+Built as a portfolio showcase, this project emphasizes **Clean Code** principles, **Separation of Concerns**, and strict **TypeScript** typing across the full stack.
 
-- Using the packaged health-check script:
+### ✨ Key Features
 
-```bash
-cd server
-npm run health -- http://<host-ip>:5000/health
-```
+- **Smart Unit System**: normalized units (e.g., input "schachtel", "bowl" -> automatically converts to standardized `pcs` or valid containers like `crate` or `pack`).
+- **Real-time Synchronization**: Frontend updates reflect backend state immediately.
+- **Bilingual Interface**: Fully internationalized (i18n) for English and German.
+- **Robust Validation**: `Zod` schemas ensure data integrity on the server.
+- **Shared Logic**: Shared constants and types between Client and Server to prevent contract drift.
+- **Modern UI**: Clean, responsive interface with loading states and error handling.
 
-(The script accepts an optional URL argument; omit it to use `http://localhost:5000/health`.)
+### 🛠 Tech Stack & Architecture
 
-Notes:
+#### Frontend (Client)
 
-- If the request fails, make sure the server process is running and the host's firewall allows inbound connections to port **5000**.
-- Ensure the backend environment variable `FRONTEND_ORIGINS` includes the origin of the frontend you are using (for example `http://192.168.1.10:5173`) so that browser requests aren't blocked by CORS.
-- To make the Vite dev server accessible remotely, start it with `npm run dev -- --host` or set `host: true` in `vite.config.ts`.
+- **Framework**: React 18 with Vite (Fast HMR)
+- **Language**: TypeScript (Strict Mode)
+- **State Management**: React Context API (`useShoppingList`) for global state.
+- **Styling**: Pure CSS with CSS Modules approach for component isolation.
+- **Testing**: Vitest for unit and hook testing.
+- **Internationalization**: Custom `i18n` context.
+
+#### Backend (Server)
+
+- **Runtime**: Node.js & Express
+- **Database**: MongoDB (via Mongoose ODM)
+- **Validation**: Zod (Runtime schema validation)
+- **Testing**: Jest & Supertest for Integration tests.
+- **Security**: Rate limiting, Helmet (headers), CORS configured.
+
+#### 🏗 Architectural Decisions
+
+1. **Monorepo-like Structure**: Both client and server live in the same repo to easily share types and logic (`shared/units.ts`), ensuring the frontend payload always matches backend expectations.
+2. **Controller-Service-Repository Pattern**: The backend separates concerns:
+   - _Routes_: Define endpoints.
+   - _Controllers_: Handle HTTP req/res and validation.
+   - _Services_: Business logic (normalization, DB interactions).
+   - _Models_: Data structure definitions.
+3. **Optimistic UI (Partial)**: The UI is designed to feel snappy, though currently relies on strictly consistent server responses for the "single source of truth".
+
+### 🚀 Getting Started
+
+#### Prerequisites
+
+- Node.js (v18+)
+- MongoDB (Running locally or via Atlas connection string)
+
+#### Installation
+
+1. **Clone & Install Dependencies**
+
+   ```bash
+   # Root (Frontend)
+   npm install
+
+   # Server
+   cd server
+   npm install
+   ```
+
+2. **Configuration**
+   - Frontend: Included `src/config.ts` points to `http://localhost:3000`.
+   - Backend: Default assumes MongoDB at `mongodb://localhost:27017/buyke`.
+
+3. **Running the App**
+
+   ```bash
+   # Terminal 1: Start Backend
+   cd server
+   npm run dev
+
+   # Terminal 2: Start Frontend
+   npm run dev
+   ```
+
+### 🧪 Quality Assurance
+
+- **Frontend Tests**: `npm run test` (in root) - Validates hooks and components.
+- **Backend Tests**: `npm test` (in server/) - Integration tests for API endpoints.
 
 ---
 
-### Frontend starten
+<a name="deutsche-version"></a>
 
-Öffnen Sie ein zweites Terminal im Hauptverzeichnis und führen Sie aus:
+## 🇩🇪 Deutsche Version
 
-```bash
-npm run dev
-```
+### Über das Projekt
 
-Das Frontend ist standardmäßig unter `http://localhost:5173` erreichbar.
+**Buyke** ist eine moderne Full-Stack-Einkaufslisten-App, entwickelt als Showcase für robuste Software-Architektur, Typsicherheit und "Clean Code". Sie ermöglicht das synchrone Verwalten von Einkäufen und legt besonderen Wert auf intelligente Dateneingabe.
 
-## Technologien
+Das Projekt dient als Referenz für **professionelle Webentwicklung** mit dem MERN-Stack (MongoDB, Express, React, Node) und striktem TypeScript.
 
-- **Frontend:** React, TypeScript, pure CSS (Tailwind outfactored for showcasing purposes!), Lucide React, Axios, Vite
-- **Backend:** Node.js (native --watch and --env-file), Express, TypeScript, Mongoose
-- **Datenbank:** MongoDB
+### ✨ Hauptfunktionen
 
-## Frontend environment variables
+- **Intelligentes Einheitensystem**: Automatische Normalisierung von Eingaben (z.B. wird "Schale" oder "Box" zu `Stk`, "Kasten" zu `Kiste`).
+- **Echtzeit-ähnliche UX**: Schnelles Feedback und Synchronisation.
+- **Mehrsprachigkeit**: Vollständige Unterstützung für Deutsch und Englisch.
+- **Strikte Validierung**: `Zod` garantiert, dass nur valide Daten in die Datenbank gelangen.
+- **Geteilte Logik**: Konstanten für Einheiten werden zwischen Server und Client geteilt, um Inkonsistenzen zu vermeiden.
 
-The frontend uses Vite. Client-facing environment variables must be prefixed with `VITE_`.
+### 🛠 Tech Stack & Architektur
 
-Create a local `.env` file (do not commit it) or copy `.env.example` and set the following variables:
+#### Frontend (Client)
 
-```
-VITE_APP_TITLE=Buyke
-VITE_APP_SLOGAN=just buy it!
-VITE_API_URL=https://api.example.com
-```
+- **React 18 & Vite**: Schnelle Performance und modernes Tooling.
+- **TypeScript**: Strenge Typisierung für wartbaren Code.
+- **Context API**: Zustandsverwaltung ohne Overhead (Redux etc. nur bei Bedarf).
+- **Vitest**: Modernes Testing-Framework für React-Komponenten.
 
-- `VITE_APP_TITLE` — displayed app title (e.g., `Buyke` or `BlickBuy`)
-- `VITE_APP_SLOGAN` — slogan text (e.g., `just buy it!`)
-- `VITE_API_URL` — base URL of the backend API your app should talk to (e.g., `https://api.example.com`). If not set the app will default to `http://localhost:5000` for local development.
+#### Backend (Server)
 
-- If your backend is hosted separately, make sure the backend environment variable `FRONTEND_ORIGINS` includes the origin(s) of your frontend (e.g., `http://example.com` or `http://192.168.1.10:5173`) so browser requests are not blocked by CORS.
+- **Express & Node.js**: Solide REST API Struktur.
+- **Mongoose & MongoDB**: Flexibles Datenmodell für schemalose Dokumente mit Schema-Enforcement durch Mongoose.
+- **Zod**: Validierung der API-Payloads zur Laufzeit.
+- **Jest & Supertest**: Umfassende Integrationstests der Endpunkte.
 
-When deploying, set these variables in your hosting environment so they are available during the build. Ensure the backend sets CORS to allow requests from your frontend origin if hosted separately.
+#### 🏗 Design-Entscheidungen
 
-## Lizenz
+1. **Shared Code**: Die Datei `shared/units.ts` ist die _Single Source of Truth_ für Einheiten. Änderungen dort wirken sich auf Validierung (Backend) und Anzeige (Frontend) gleichermaßen aus.
+2. **Schichtenarchitektur**: Klare Trennung im Backend (Route -> Controller -> Service -> Model) erleichtert Wartbarkeit und Testing.
+3. **No UI-Lib Dependency**: Bewusster Verzicht auf schwere UI-Frameworks (MUI, Bootstrap) zugunsten von eigenem CSS, um grundlegendes CSS-Verständnis und Performance zu demonstrieren.
 
-MIT
+### 🚀 Startanleitung
+
+1. **Installation**
+
+   ```bash
+   npm install       # Frontend
+   cd server && npm install  # Backend
+   ```
+
+2. **Starten**
+
+   ```bash
+   # Backend
+   cd server
+   npm run dev
+
+   # Frontend
+   npm run dev
+   ```
+
+### 🛡 Sicherheit
+
+- **Rate Limiting**: Verhindert Missbrauch der API.
+- **Input Sanitization**: Durch Mongoose und Zod werden Injection-Angriffe erschwert.
+- **Helmet**: Setzt wichtige HTTP-Security-Header.
+
+---
+
+**Author**: Malone  
+**License**: MIT

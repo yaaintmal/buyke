@@ -57,6 +57,8 @@ Built as a portfolio showcase, this project emphasizes **Clean Code** principles
    - _Models_: Data structure definitions.
 3. **Optimistic UI (Partial)**: The UI is designed to feel snappy, though currently relies on strictly consistent server responses for the "single source of truth".
 
+<img width="1172" height="1184" alt="performance_test-2026-17-01" src="https://github.com/user-attachments/assets/e88df8e7-077e-4af7-99c7-870011dadb1c" />
+
 ### 🚀 Getting Started
 
 #### Prerequisites
@@ -138,6 +140,9 @@ Das Projekt dient als Referenz für **professionelle Webentwicklung** mit dem ME
 1. **Shared Code**: Die Datei `shared/units.ts` ist die _Single Source of Truth_ für Einheiten. Änderungen dort wirken sich auf Validierung (Backend) und Anzeige (Frontend) gleichermaßen aus.
 2. **Schichtenarchitektur**: Klare Trennung im Backend (Route -> Controller -> Service -> Model) erleichtert Wartbarkeit und Testing.
 3. **No UI-Lib Dependency**: Bewusster Verzicht auf schwere UI-Frameworks (MUI, Bootstrap) zugunsten von eigenem CSS, um grundlegendes CSS-Verständnis und Performance zu demonstrieren.
+
+<img width="1172" height="1184" alt="performance_test-2026-17-01" src="https://github.com/user-attachments/assets/e88df8e7-077e-4af7-99c7-870011dadb1c" />
+
 
 ### 🚀 Startanleitung
 

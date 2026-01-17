@@ -32,7 +32,7 @@ Built as a portfolio showcase, this project emphasizes **Clean Code** principles
 
 #### Frontend (Client)
 
-- **Framework**: React 18 with Vite (Fast HMR)
+- **Framework**: React 19 with Vite (Fast HMR)
 - **Language**: TypeScript (Strict Mode)
 - **State Management**: React Context API (`useShoppingList`) for global state.
 - **Styling**: Pure CSS with CSS Modules approach for component isolation.
@@ -61,7 +61,7 @@ Built as a portfolio showcase, this project emphasizes **Clean Code** principles
 
 #### Prerequisites
 
-- Node.js (v18+)
+- Node.js (v20+)
 - MongoDB (Running locally or via Atlas connection string)
 
 #### Installation
@@ -78,8 +78,8 @@ Built as a portfolio showcase, this project emphasizes **Clean Code** principles
    ```
 
 2. **Configuration**
-   - Frontend: Included `src/config.ts` points to `http://localhost:3000`.
-   - Backend: Default assumes MongoDB at `mongodb://localhost:27017/buyke`.
+   - Frontend: Configured in `src/lib/apiClient.ts`, defaults to `http://localhost:5000`.
+   - Backend: Default assumes MongoDB at `mongodb://localhost:27017/buyke` and runs on port 5000.
 
 3. **Running the App**
 
@@ -121,7 +121,7 @@ Das Projekt dient als Referenz für **professionelle Webentwicklung** mit dem ME
 
 #### Frontend (Client)
 
-- **React 18 & Vite**: Schnelle Performance und modernes Tooling.
+- **React 19 & Vite**: Schnelle Performance und modernes Tooling.
 - **TypeScript**: Strenge Typisierung für wartbaren Code.
 - **Context API**: Zustandsverwaltung ohne Overhead (Redux etc. nur bei Bedarf).
 - **Vitest**: Modernes Testing-Framework für React-Komponenten.
